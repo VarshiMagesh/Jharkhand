@@ -1,0 +1,105 @@
+import { Link } from "react-router-dom";
+import { Phone, Mail, MessageSquare, ExternalLink } from "lucide-react";
+
+const Footer = () => {
+  const quickLinks = [
+    { name: "Explore Destinations", path: "/destinations" },
+    { name: "Plan Your Visit", path: "/plan-journey" },
+    { name: "Local Marketplace", path: "/local-marketplace" },
+    { name: "Verified Guides", path: "/guides" },
+    { name: "Travel Guidelines", path: "/guidelines" },
+    { name: "Contact Support", path: "/contact" },
+  ];
+
+  const officialLinks = [
+    { name: "Govt. of Jharkhand", url: "https://www.jharkhand.gov.in/" },
+    { name: "Ministry of Tourism", url: "https://tourism.gov.in/" },
+    { name: "Forest Department", url: "https://forest.jharkhand.gov.in/" },
+    { name: "Wildlife Board", url: "https://www.wii.gov.in/" },
+    { name: "Incredible India", url: "https://www.incredibleindia.org/" },
+  ];
+
+  return (
+    <footer className="py-20">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-white">
+          <div className="lg:col-span-2 space-y-8">
+            <div>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 hero-gradient rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-2xl">J</span>
+                </div>
+                <div>
+                  <div className="font-bold text-xl text-white">Jharkhand Tourism</div>
+                </div>
+              </div>
+              <p className="text-white/80 leading-relaxed">
+                Experience the Soul of India – Discover Jharkhand's hidden treasures, from
+                thundering waterfalls to ancient tribal heritage. Your gateway to authentic
+                wilderness adventures.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="bg-green-500/20 p-4 rounded-lg">
+                <h4 className="font-bold mb-3">Tourism Helplines</h4>
+                <div className="space-y-2 text-sm">
+                  <p className="flex items-center gap-2"><Phone size={14} /> 1800-123-TOUR (8687)</p>
+                  <p className="flex items-center gap-2"><Phone size={14} /> Emergency: 112</p>
+                  <p className="flex items-center gap-2"><Mail size={14} /> help@jharkhandtourism.gov.in</p>
+                </div>
+              </div>
+              <div className="bg-green-500/20 p-4 rounded-lg">
+                <h4 className="font-bold mb-3">24/7 Support</h4>
+                <div className="space-y-2 text-sm">
+                  <p>Tourist Information Centers</p>
+                  <p className="flex items-center gap-2"><MessageSquare size={14} /> WhatsApp: +91-9876543210</p>
+                  <p className="text-xs text-white/70">Available in Hindi, English & Local languages.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-lg mb-4">Quick Links</h3>
+            <ul className="space-y-3">
+              {quickLinks.map(link => (
+                <li key={link.name}>
+                  <Link to={link.path} className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                    <ExternalLink size={14} /> {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-lg mb-4">Official Links</h3>
+            <ul className="space-y-3">
+              {officialLinks.map(link => (
+                <li key={link.name}>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                    <ExternalLink size={14} /> {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-white/20 pt-8 mt-12 text-sm text-white/80">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <p className="mb-4 md:mb-0">
+              © 2025 Department of Tourism, Government of Jharkhand. All rights reserved.
+            </p>
+            <div className="flex space-x-4">
+              <Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
+              <Link to="/terms-of-service" className="hover:text-white">Terms of Service</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

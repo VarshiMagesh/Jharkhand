@@ -1,0 +1,80 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import hundruFalls from "@/assets/hundru-falls.jpg";
+import netarhatHills from "@/assets/netarhat-hills.jpg";
+import betlaPark from "@/assets/betla-national-park.jpg";
+
+const DestinationsGrid = () => {
+  const destinations = [
+    {
+      id: 1,
+      name: "Dassam Falls",
+      image: hundruFalls,
+      description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
+    },
+    {
+      id: 2,
+      name: "Betla National Park",
+      image: betlaPark,
+      description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
+    },
+    {
+      id: 3,
+      name: "Netarhat Hills",
+      image: netarhatHills,
+      description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
+    }
+  ];
+
+  return (
+    // 1. REMOVED "bg-background" to make the section transparent
+    <section className="py-20">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between mb-12">
+          {/* 2. CHANGED heading text to white */}
+          <h2 className="text-3xl md:text-4xl font-bold text-white">
+            Featured Destinations
+          </h2>
+          <Button variant="ghost" className="text-accent hover:text-accent-foreground">
+            See all
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {destinations.map((destination) => (
+            // 3. ADDED semi-transparent background, blur, and border to the card
+            <Card key={destination.id} className="group overflow-hidden hover:shadow-lg transition-all duration-300 bg-black/20 backdrop-blur-sm border-white/20">
+              <div className="relative overflow-hidden">
+                <img
+                  src={destination.image}
+                  alt={destination.name}
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              
+              <CardContent className="p-6">
+                {/* 4. CHANGED card text to white */}
+                <h3 className="text-xl font-semibold text-white mb-3">
+                  {destination.name}
+                </h3>
+                
+                <p className="text-white/80 mb-4 leading-relaxed">
+                  {destination.description}
+                </p>
+                
+                <Button variant="ghost" className="text-accent hover:text-accent-foreground p-0">
+                  View more
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default DestinationsGrid;
