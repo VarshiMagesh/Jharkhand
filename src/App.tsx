@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import LocalMarketplace from "./pages/localmarketplace";
 import Guides from "./pages/guides";
+import Chatbot from "./components/Chatbot";
 
 // 👇 1. Import the new component
 import ScrollToTop from "@/components/ScrollToTop";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/guides" element={<Guides />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Chatbot />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
