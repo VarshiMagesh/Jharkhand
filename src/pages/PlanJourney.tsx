@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import ItineraryPlanner from "@/components/ItineraryPlanner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, Star, CheckCircle, Users, Clock } from "lucide-react";
+import { Phone, Mail, Star, CheckCircle, Users, Clock, Home } from "lucide-react";
 import Footer from "@/components/Footer";
 
 const whyChooseUs = [
@@ -45,6 +46,20 @@ const PlanJourney = () => {
               based on your exact preferences, interests, and budget in minutes.
             </p>
             
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Link to="/Accomadation">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="px-8 py-3 font-semibold border-2 border-accent text-accent hover:bg-accent hover:text-white transition-all duration-300 hover:scale-105"
+                >
+                  <Home className="w-5 h-5 mr-2" />
+                  Accommodations
+                </Button>
+              </Link>
+            </div>
+            
             {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
               <div className="text-center">
@@ -78,6 +93,33 @@ const PlanJourney = () => {
 
           {/* Sidebar */}
           <div className="space-y-8">
+            
+            {/* Quick Access Card */}
+            <Card className="shadow-card border-2 border-accent/20">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4">Quick Access</h3>
+                <div className="space-y-3">
+                  <Link to="/accommodation" className="block">
+                    <Button variant="outline" className="w-full justify-start text-left border-accent/30 hover:bg-accent/10">
+                      <Home className="w-4 h-4 mr-2" />
+                      Browse Accommodations
+                    </Button>
+                  </Link>
+                  <Link to="/destinations" className="block">
+                    <Button variant="outline" className="w-full justify-start text-left border-accent/30 hover:bg-accent/10">
+                      <Star className="w-4 h-4 mr-2" />
+                      Explore Destinations
+                    </Button>
+                  </Link>
+                  <Link to="/guides" className="block">
+                    <Button variant="outline" className="w-full justify-start text-left border-accent/30 hover:bg-accent/10">
+                      <Users className="w-4 h-4 mr-2" />
+                      Find Local Guides
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
             
             {/* Contact Info */}
             <Card className="shadow-card">
@@ -149,7 +191,6 @@ const PlanJourney = () => {
           </div>
         </div>
 
-
         {/* Trust Indicators */}
         <section className="mt-16">
           <Card className="hero-gradient text-white">
@@ -173,8 +214,8 @@ const PlanJourney = () => {
           </Card>
         </section>
       </div>
-              <Footer />
-
+      
+      <Footer />
     </div>
   );
 };
