@@ -1,11 +1,31 @@
 import Navigation from "@/components/Navigation";
+import ItineraryPlanner from "@/components/ItineraryPlanner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, MapPin, Users, Clock, Phone, Mail, MessageSquare, CheckCircle, Star } from "lucide-react";
+import { Phone, Mail, Star, CheckCircle, Users, Clock } from "lucide-react";
+
+const whyChooseUs = [
+  {
+    icon: Star,
+    title: "AI-Powered Planning",
+    description: "Advanced AI creates personalized itineraries based on your exact preferences"
+  },
+  {
+    icon: CheckCircle,
+    title: "Local Expertise", 
+    description: "Deep knowledge of Jharkhand's hidden gems and authentic experiences"
+  },
+  {
+    icon: Users,
+    title: "24/7 Support",
+    description: "Round-the-clock assistance during your entire journey"
+  },
+  {
+    icon: Clock,
+    title: "Instant Generation",
+    description: "Get your complete itinerary in minutes, not days"
+  }
+];
 
 const journeyTypes = [
   {
@@ -34,161 +54,52 @@ const journeyTypes = [
   }
 ];
 
-const whyChooseUs = [
-  {
-    icon: Star,
-    title: "Expert Local Guides",
-    description: "Native guides with deep cultural knowledge and years of experience"
-  },
-  {
-    icon: CheckCircle,
-    title: "Customized Itineraries", 
-    description: "Personalized tours designed according to your interests and preferences"
-  },
-  {
-    icon: Users,
-    title: "Small Group Tours",
-    description: "Intimate experiences with maximum 8-10 people per group"
-  },
-  {
-    icon: Clock,
-    title: "24/7 Support",
-    description: "Round-the-clock assistance during your entire journey"
-  }
-];
-
 const PlanJourney = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       
       {/* Header Section */}
-      <section className="pt-24 pb-12 bg-gradient-to-b from-muted/30 to-background">
+      <section className="pt-24 pb-12 nature-gradient">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-              Plan Your <span className="text-accent">Journey</span>
+              AI-Powered <span className="text-accent">Itinerary Planner</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Create your perfect Jharkhand adventure with our expert guidance. 
-              From customized itineraries to local experiences, we've got you covered.
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              Experience the future of travel planning. Our advanced AI creates personalized Jharkhand adventures 
+              based on your exact preferences, interests, and budget in minutes.
             </p>
+            
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-accent">500+</div>
+                <div className="text-sm text-muted-foreground">Destinations</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-accent">10K+</div>
+                <div className="text-sm text-muted-foreground">Happy Travelers</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-accent">95%</div>
+                <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-accent">2 Min</div>
+                <div className="text-sm text-muted-foreground">Planning Time</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-4 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
           
-          {/* Planning Form */}
-          <div className="lg:col-span-2">
-            <Card className="shadow-card">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-6">Tell Us About Your Trip</h2>
-                
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="fullName">Full Name *</Label>
-                      <Input id="fullName" placeholder="Enter your full name" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input id="email" type="email" placeholder="Enter your email" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" placeholder="Enter your phone number" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="travelers">Number of Travelers</Label>
-                      <Select>
-                        <SelectTrigger className="mt-2">
-                          <SelectValue placeholder="Select number of travelers" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">1 Person</SelectItem>
-                          <SelectItem value="2">2 People</SelectItem>
-                          <SelectItem value="3-5">3-5 People</SelectItem>
-                          <SelectItem value="6-10">6-10 People</SelectItem>
-                          <SelectItem value="10+">More than 10</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="startDate">Preferred Start Date</Label>
-                      <Input id="startDate" type="date" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label htmlFor="duration">Trip Duration</Label>
-                      <Select>
-                        <SelectTrigger className="mt-2">
-                          <SelectValue placeholder="Select duration" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="2-3">2-3 Days</SelectItem>
-                          <SelectItem value="4-5">4-5 Days</SelectItem>
-                          <SelectItem value="6-7">6-7 Days</SelectItem>
-                          <SelectItem value="8+">More than a week</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="interests">Interests & Preferences</Label>
-                    <Select>
-                      <SelectTrigger className="mt-2">
-                        <SelectValue placeholder="What interests you most?" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="adventure">Adventure & Trekking</SelectItem>
-                        <SelectItem value="culture">Cultural Experiences</SelectItem>
-                        <SelectItem value="nature">Nature & Wildlife</SelectItem>
-                        <SelectItem value="photography">Photography Tours</SelectItem>
-                        <SelectItem value="family">Family Vacation</SelectItem>
-                        <SelectItem value="mixed">Mix of Everything</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="budget">Budget Range (per person)</Label>
-                    <Select>
-                      <SelectTrigger className="mt-2">
-                        <SelectValue placeholder="Select your budget range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="budget">₹5,000 - ₹10,000</SelectItem>
-                        <SelectItem value="mid">₹10,000 - ₹20,000</SelectItem>
-                        <SelectItem value="premium">₹20,000 - ₹35,000</SelectItem>
-                        <SelectItem value="luxury">₹35,000+</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="message">Special Requests or Questions</Label>
-                    <Textarea 
-                      id="message" 
-                      placeholder="Tell us about any specific requirements, dietary restrictions, or questions you have..."
-                      className="mt-2 min-h-[100px]"
-                    />
-                  </div>
-
-                  <Button size="lg" className="w-full hero-gradient text-white shadow-nature">
-                    <MessageSquare className="w-5 h-5 mr-2" />
-                    Send Planning Request
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+          {/* Main Itinerary Planner */}
+          <div className="lg:col-span-3">
+            <ItineraryPlanner />
           </div>
 
           {/* Sidebar */}
@@ -220,7 +131,7 @@ const PlanJourney = () => {
             {/* Why Choose Us */}
             <Card className="shadow-card">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Why Choose Us?</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Why Choose Our AI Planner?</h3>
                 <div className="space-y-4">
                   {whyChooseUs.map((item, index) => (
                     <div key={index} className="flex items-start space-x-3">
@@ -236,17 +147,42 @@ const PlanJourney = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Process Steps */}
+            <Card className="shadow-card">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4">How It Works</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                    <span className="text-sm text-muted-foreground">Fill detailed preferences</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                    <span className="text-sm text-muted-foreground">AI generates itinerary</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                    <span className="text-sm text-muted-foreground">Review & customize</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                    <span className="text-sm text-muted-foreground">Book & enjoy!</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        {/* Journey Packages */}
+        {/* Popular Packages Section */}
         <section className="mt-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">
-              Popular <span className="text-accent">Journey Packages</span>
+              Or Choose from <span className="text-accent">Pre-Built Packages</span>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Choose from our carefully curated packages or let us create a custom itinerary for you
+              Not sure about custom planning? Start with our popular packages and customize as needed
             </p>
           </div>
 
@@ -275,13 +211,36 @@ const PlanJourney = () => {
                     <p className="font-bold text-lg text-accent mb-4">{journey.price}</p>
                     
                     <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-smooth">
-                      Select Package
+                      Use as Template
                     </Button>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
+        </section>
+
+        {/* Trust Indicators */}
+        <section className="mt-16">
+          <Card className="hero-gradient text-white">
+            <CardContent className="p-8 text-center">
+              <h3 className="text-2xl font-bold mb-4">Trusted by Thousands of Travelers</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <div className="text-3xl font-bold">4.9/5</div>
+                  <div className="text-sm opacity-90">Average Rating</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold">48 Hours</div>
+                  <div className="text-sm opacity-90">Response Time</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold">100%</div>
+                  <div className="text-sm opacity-90">Customizable</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </section>
       </div>
     </div>

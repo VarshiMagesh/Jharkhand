@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"; // 1. Import the Link component
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Users, Droplets } from "lucide-react";
 
@@ -21,15 +22,20 @@ const HeroSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button className="hero-gradient text-white shadow-nature px-8 py-3 text-lg group">
-              Explore Hidden Gems
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            {/* 2. Wrap "Explore Hidden Gems" button in a Link to /destinations */}
+            <Link to="/destinations">
+              <Button className="hero-gradient text-white shadow-nature px-8 py-3 text-lg group">
+                Explore Hidden Gems
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
             
-            {/* 👇 THIS BUTTON HAS BEEN UPDATED 👇 */}
-            <Button variant="outline" className="bg-white/20 border-white text-white hover:bg-white hover:text-primary px-8 py-3 text-lg backdrop-blur-sm">
-              Plan Your Adventure
-            </Button>
+            {/* 3. Wrap "Plan Your Adventure" button in a Link to /plan-journey */}
+            <Link to="/plan-journey">
+              <Button variant="outline" className="bg-white/20 border-white text-white hover:bg-white hover:text-primary px-8 py-3 text-lg backdrop-blur-sm">
+                Plan Your Adventure
+              </Button>
+            </Link>
           </div>
 
           <div className="inline-flex items-center gap-8 text-sm bg-black/20 backdrop-blur-sm rounded-full px-8 py-4 mb-8">
