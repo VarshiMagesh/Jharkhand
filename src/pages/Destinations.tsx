@@ -1,5 +1,5 @@
 // src/pages/Destinations.tsx
-
+import Footer from "@/components/Footer";
 import { Link } from "react-router-dom"; // CORRECTED IMPORT
 import { useState, useMemo } from "react";
 import Navigation from "@/components/Navigation";
@@ -335,6 +335,8 @@ const Destinations = () => {
           </Button>
         </div>
       </section>
+              <Footer />
+
     </div>
   );
 };

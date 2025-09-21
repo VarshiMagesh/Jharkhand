@@ -13,7 +13,7 @@ import NotFound from "./pages/NotFound";
 import LocalMarketplace from "./pages/localmarketplace";
 import Guides from "./pages/guides";
 import Chatbot from "./components/Chatbot";
-
+import Accomadation from "./pages/Accomadation";
 // 👇 1. Import the new component
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -37,6 +37,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/local-marketplace" element={<LocalMarketplace />} />
           <Route path="/guides" element={<Guides />} />
+          <Route path="/accomadation" element={<Accomadation />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Chatbot />

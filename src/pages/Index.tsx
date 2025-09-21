@@ -4,7 +4,7 @@ import HighlightsSection from "@/components/HighlightsSection";
 import DestinationsGrid from "@/components/DestinationsGrid";
 import FestivalsSection from "@/components/FestivalsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import Footer from "@/components/Footer";
+import Footer from "@/components/Footer1";
 
 // Import the background image
 import heroImage from "@/assets/hero-jharkhand.jpg";

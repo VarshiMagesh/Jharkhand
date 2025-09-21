@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Music, Palette, Utensils, Calendar, Users, Heart, Camera, Trophy, X } from "lucide-react";
+import Footer from "@/components/Footer";
 
 // Main section image
 import tribalCulture from "@/assets/tribal-culture.jpg";
@@ -246,6 +247,8 @@ const Culture = () => {
           </div>
         </div>
       </section>
+              <Footer />
+
     </div>
   );
 };

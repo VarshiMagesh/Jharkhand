@@ -9,7 +9,7 @@ import { Star, Search, MapPin, Languages, BookMarked, X, IndianRupee, Clock, Use
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "../components/ui/use-toast";
-
+import Footer from "@/components/Footer";
 // Import the guide images
 import guideRajesh from "../assets/guide-rajesh.jpg";
 import guidePriya from "../assets/guide-priya.jpg";
@@ -308,6 +308,7 @@ const Guides = () => {
            )}
         </DialogContent>
       </Dialog>
+        <Footer />
 
     </div>
   );
