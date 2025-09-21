@@ -1,59 +1,197 @@
+// src/pages/Destinations.tsx
+
+import { Link } from "react-router-dom"; // CORRECTED IMPORT
+import { useState, useMemo } from "react";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Clock, Users, Camera, TreePine } from "lucide-react";
-import hundruFalls from "@/assets/hundru-falls.jpg";
-import netarhatHills from "@/assets/netarhat-hills.jpg";
-import betlaPark from "@/assets/betla-national-park.jpg";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { MapPin, Star, Clock, Users, Camera, TreePine, Icon } from "lucide-react";
+
+// Import your image assets
 
 const allDestinations = [
   {
     id: 1,
-    name: "Hundru Falls",
+    name: "Jonha Falls",
     location: "Ranchi",
-    image: hundruFalls,
-    rating: 4.8,
-    duration: "Half Day",
-    category: "Waterfalls",
+    category: "Waterfall",
+    image: "/jonhafalls.jpg",
+    description: "A beautiful, hanging valley waterfall surrounded by lush forests.",
+    fullDescription: "Jonha Falls is a waterfall located in the Ranchi district of the Indian state of Jharkhand. Situated on the edge of the Ranchi plateau, it is an example of a hanging valley waterfall. To admire the fall, one must descend around 750 steps. There is also a Buddhist shrine here, with a temple dedicated to Lord Gautama Buddha.",
+    highlights: ["Picturesque scenery", "Buddhist shrine", "750 steps down"],
+    timings: "8:00 AM - 4:00 PM",
+    bestTime: "October to February",
     icon: Camera,
-    description: "Experience the majestic 98-meter waterfall cascading through dense forests. Perfect for photography and nature walks.",
-    highlights: ["98m high waterfall", "Dense forest trails", "Photography spots", "Picnic areas"],
-    bestTime: "October to March"
+    rating: 4.5,
+    duration: "2-3 hours"
   },
   {
     id: 2,
-    name: "Netarhat Hills",
-    location: "Latehar", 
-    image: netarhatHills,
-    rating: 4.7,
-    duration: "2 Days",
-    category: "Hill Stations",
+    name: "Netarhat",
+    location: "Latehar",
+    category: "Hill Station",
+    image: "/netarhat.jpg",
+    description: "Known as the 'Queen of Chotanagpur', famous for its stunning sunrises and sunsets.",
+    fullDescription: "Netarhat is a popular hill station in the Latehar district of Jharkhand. Situated at an altitude of 3,696 feet, it is renowned for its serene environment, lush green forests, and picturesque landscapes, especially the views from Magnolia Point at sunset and Koel View Point at sunrise.",
+    highlights: ["Magnolia Point (Sunset)", "Koel View Point (Sunrise)", "Netarhat Residential School"],
+    timings: "Open 24 hours (viewpoints best at dawn/dusk)",
+    bestTime: "October to March",
     icon: TreePine,
-    description: "Known as the 'Queen of Chotanagpur', offering stunning sunrise and sunset views with cool pleasant weather.",
-    highlights: ["Sunrise & sunset points", "Cool climate", "Pine forests", "Trekking trails"],
-    bestTime: "September to February"
+    rating: 4.5,
+    duration: "2-3 hours"
   },
   {
     id: 3,
     name: "Betla National Park",
-    location: "Palamau",
-    image: betlaPark,
-    rating: 4.6,
-    duration: "Full Day",
-    category: "Wildlife",
+    location: "Latehar",
+    category: "National Park",
+    image: "/betlanationalpark.jpg",
+    description: "One of India's earliest tiger reserves, offering rich biodiversity and wildlife safaris.",
+    fullDescription: "Betla National Park is a national park located on the Chota Nagpur Plateau in the Latehar district. It was one of the first nine tiger reserves established in India under Project Tiger. The park boasts a wide variety of wildlife, including elephants, tigers, leopards, and deer, and offers jeep safaris for visitors.",
+    highlights: ["Jeep Safaris", "Tiger and Elephant sightings", "Palamu Forts"],
+    timings: "6:00 AM - 5:00 PM (Safari timings vary)",
+    bestTime: "October to April",
     icon: Users,
-    description: "Wildlife sanctuary home to tigers, elephants, and diverse flora and fauna. Experience jungle safaris and nature walks.",
-    highlights: ["Tiger reserve", "Elephant sightings", "Jungle safari", "Bird watching"],
-    bestTime: "November to April"
+    rating: 4.5,
+    duration: "2-3 hours"
   },
+    {
+    id: 4,
+    name: "Dassam Falls",
+    location: "Ranchi",
+    category: "Waterfall",
+    image: "/dassamfalls.jpg",
+    description: "A spectacular waterfall where the Kanchi River plunges from a height of 144 feet.",
+    fullDescription: "Dassam Falls, also known as Dassam Ghagh, is located near Taimara village in the Ranchi district. The water of the Kanchi River cascades down from a height of about 44 meters (144 ft), creating a stunning view. It is a popular picnic spot, but swimming is prohibited due to the strong currents.",
+    highlights: ["144-foot drop", "Natural rock formations", "Popular picnic spot"],
+    timings: "9:00 AM - 5:00 PM",
+    bestTime: "October to February",
+    icon: Camera,
+    rating: 4.5,
+    duration: "2-3 hours"
+  },
+    {
+    id: 5,
+    name: "Jagannath Temple",
+    location: "Ranchi",
+    category: "Temple",
+    image: "/jagannathtemple.jpg",
+    description: "A 17th-century temple built in the Kalinga architectural style, resembling the famous Puri temple.",
+    fullDescription: "The Jagannath Temple in Ranchi was built in 1691 by king Ani Nath Shahdeo. It is located on a small hillock in the Jagannathpur area and is a smaller replica of the famous Jagannath Temple in Puri. The annual Rath Yatra festival held here is a major attraction, drawing thousands of devotees.",
+    highlights: ["Kalinga Architecture", "Annual Rath Yatra", "Panoramic city view"],
+    timings: "5:00 AM - 12:00 PM, 4:00 PM - 9:00 PM",
+    bestTime: "During the Rath Yatra festival (June/July)",
+    icon: Users,
+    rating: 4.5,
+    duration: "2-3 hours"
+  },
+    {
+    id: 6,
+    name: "Sita Falls",
+    location: "Ranchi",
+    category: "Waterfall",
+    image: "/sitafalls.jpg",
+    description: "A serene and lesser-known waterfall, offering a tranquil escape into nature.",
+    fullDescription: "Sita Falls is located near Ranchi and is formed by the rivulets of the Radu River. It's a relatively unexplored and peaceful spot, ideal for those looking to avoid the crowds found at more popular falls. The surrounding dense forests add to its natural charm.",
+    highlights: ["Tranquil atmosphere", "Scenic beauty", "Ideal for nature walks"],
+    timings: "9:00 AM - 5:00 PM",
+    bestTime: "October to February",
+    icon: Camera,
+    rating: 4.5,
+    duration: "2-3 hours"
+  },
+    {
+    id: 7,
+    name: "Bhagwan Birsa Biological Park",
+    location: "Ranchi",
+    category: "Zoo / Biological Park",
+    image: "/birsazoo.jpg",
+    description: "A sprawling zoo and botanical garden housing a wide variety of flora and fauna.",
+    fullDescription: "Located on the Ranchi-Patna highway, the Bhagwan Birsa Biological Park is a well-maintained zoological garden. It's divided into two sections by the highway: the larger zoological section and a smaller botanical section. It's a popular spot for families and wildlife enthusiasts, featuring a boating facility in its artificial lake.",
+    highlights: ["Diverse animal species", "Boating facility", "Botanical garden"],
+    timings: "9:00 AM - 5:00 PM (Closed on Mondays)",
+    bestTime: "October to March",
+    icon: Users,
+    rating: 4.5,
+    duration: "2-3 hours"
+  },
+    {
+    id: 8,
+    name: "Tagore Hill",
+    location: "Ranchi",
+    category: "Hill / Landmark",
+    image: "/tagorehill.jpg",
+    description: "A historic hill associated with the Tagore family, offering panoramic views of Ranchi.",
+    fullDescription: "Tagore Hill is a scenic spot in Ranchi named after the famous poet Rabrindranath Tagore. His elder brother, Jyotirindranath Tagore, built a house (Shanti Dham) here and spent his last years on this hill. It's a place of historical significance and offers a breathtaking 360-degree view of the city.",
+    highlights: ["Connection to Rabindranath Tagore", "Panoramic city view", "Ramakrishna Mission ashram"],
+    timings: "Open 24 hours (best during daylight)",
+    bestTime: "October to March",
+    icon: Camera,
+    rating: 4.5,
+    duration: "2-3 hours"
+  },
+    {
+    id: 9,
+    name: "Nakshatra Van",
+    location: "Ranchi",
+    category: "Park / Garden",
+    image: "/nakshatravan.jpg",
+    description: "A unique park where trees are planted according to zodiac signs and astrological beliefs.",
+    fullDescription: "Nakshatra Van is a park created by the Jharkhand Forest Department near the Governor's House. The park is designed based on the concept of Nakshatras (lunar mansions in Hindu astrology), with each Nakshatra associated with a specific tree that is believed to be sacred. It's a beautiful blend of astrology, botany, and leisure, featuring a musical fountain.",
+    highlights: ["Unique astrological concept", "Musical fountain", "Well-maintained pathways"],
+    timings: "9:30 AM - 6:30 PM (Closed on Mondays)",
+    bestTime: "Throughout the year",
+    icon: TreePine,
+    rating: 4.5,
+    duration: "2-3 hours"
+  }
 ];
 
 const Destinations = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOrder, setSortOrder] = useState("default");
+
+  const categories = ["All", ...new Set(allDestinations.map((dest) => dest.category))];
+
+  const finalDestinations = useMemo(() => {
+    const filtered = allDestinations.filter((dest) => {
+      const matchesSearch =
+        dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        dest.location.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "All" || dest.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+
+    const sorted = [...filtered];
+    switch (sortOrder) {
+      case "name-asc":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "rating-desc":
+        sorted.sort((a, b) => b.rating - a.rating);
+        break;
+      case "location-asc":
+        sorted.sort((a, b) => a.location.localeCompare(b.location));
+        break;
+      default:
+        break;
+    }
+    return sorted;
+  }, [searchTerm, selectedCategory, sortOrder]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
-      {/* Header Section */}
+
       <section className="pt-24 pb-12 bg-gradient-to-b from-muted/30 to-background">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
@@ -61,114 +199,136 @@ const Destinations = () => {
               Explore <span className="text-accent">Destinations</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Discover the most breathtaking places in Jharkhand, from majestic waterfalls 
-              to wildlife sanctuaries and serene hill stations.
+              Discover the most breathtaking places in Jharkhand, from majestic waterfalls to wildlife sanctuaries and serene hill stations.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Destinations Grid */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {allDestinations.map((destination) => (
-              <Card
-                key={destination.id}
-                className="group overflow-hidden shadow-card hover:shadow-nature transition-smooth hover:scale-105"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={destination.image}
-                    alt={destination.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
-                  />
-                  
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4">
-                    <div className="hero-gradient text-white px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1">
-                      <destination.icon className="w-4 h-4" />
-                      <span>{destination.category}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Rating */}
-                  <div className="absolute top-4 right-4">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="text-sm font-medium">{destination.rating}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-smooth">
-                      {destination.name}
-                    </h3>
-                    <div className="flex items-center space-x-1 text-muted-foreground">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm">{destination.duration}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-1 text-muted-foreground mb-3">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">{destination.location}</span>
-                  </div>
-                  
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {destination.description}
-                  </p>
-                  
-                  {/* Highlights */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-foreground mb-2">Highlights:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {destination.highlights.slice(0, 3).map((highlight, index) => (
-                        <span
-                          key={index}
-                          className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full"
-                        >
-                          {highlight}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Best Time */}
-                  <div className="text-xs text-muted-foreground mb-4">
-                    <strong>Best Time:</strong> {destination.bestTime}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1 group-hover:bg-primary group-hover:text-primary-foreground transition-smooth"
-                    >
-                      Learn More
-                    </Button>
-                    <Button
-                      className="flex-1 hero-gradient text-white shadow-nature"
-                    >
-                      Plan Visit
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      <section className="container mx-auto px-4 lg:px-8 py-8">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 max-w-2xl mx-auto">
+          <Input
+            placeholder="Search by name or location..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-1"
+          />
+          <Select value={sortOrder} onValueChange={setSortOrder}>
+            <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Sort by: Default</SelectItem>
+              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+              <SelectItem value="rating-desc">Rating (High to Low)</SelectItem>
+              <SelectItem value="location-asc">Location (A-Z)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </Button>
+          ))}
         </div>
       </section>
 
-      {/* Call to Action */}
+      <section className="py-16 pt-8">
+        <div className="container mx-auto px-4 lg:px-8">
+          {finalDestinations.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              {finalDestinations.map((destination) => (
+                <Card
+                  key={destination.id}
+                  className="group overflow-hidden shadow-card hover:shadow-nature transition-smooth hover:scale-105"
+                >
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={destination.image}
+                      alt={destination.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <div className="hero-gradient text-white px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1">
+                        <destination.icon className="w-4 h-4" />
+                        <span>{destination.category}</span>
+                      </div>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        <span className="text-sm font-medium">{destination.rating}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-smooth">
+                        {destination.name}
+                      </h3>
+                      <div className="flex items-center space-x-1 text-muted-foreground">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">{destination.duration}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-1 text-muted-foreground mb-3">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">{destination.location}</span>
+                    </div>
+                    <p className="text-muted-foreground text-sm mb-4">
+                      {destination.description}
+                    </p>
+                    <div className="mb-4">
+                      <h4 className="text-sm font-semibold text-foreground mb-2">Highlights:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {destination.highlights.slice(0, 3).map((highlight, index) => (
+                          <span
+                            key={index}
+                            className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full"
+                          >
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground mb-4">
+                      <strong>Best Time:</strong> {destination.bestTime}
+                    </div>
+                    <div className="flex gap-2">
+                      {/* CORRECTED LINK WRAPPER */}
+                      <Link to={`/destinations/${destination.id}`} className="flex-1">
+                        <Button
+                          variant="outline"
+                          className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-smooth"
+                        >
+                          Learn More
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No destinations found matching your criteria.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">
             Ready to Plan Your Adventure?
           </h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Let our expert guides help you create the perfect itinerary for your Jharkhand journey
+            Let our expert guides help you create the perfect itinerary for your Jharkhand journey.
           </p>
           <Button size="lg" className="hero-gradient text-white shadow-nature">
             Start Planning Your Journey

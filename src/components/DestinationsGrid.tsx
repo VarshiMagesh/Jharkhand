@@ -1,28 +1,25 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import hundruFalls from "@/assets/hundru-falls.jpg";
-import netarhatHills from "@/assets/netarhat-hills.jpg";
-import betlaPark from "@/assets/betla-national-park.jpg";
 
 const DestinationsGrid = () => {
   const destinations = [
     {
       id: 1,
-      name: "Dassam Falls",
-      image: hundruFalls,
+      name: "Jonha Falls",
+      image: "/jonhafalls.jpg",
       description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
     },
     {
       id: 2,
       name: "Betla National Park",
-      image: betlaPark,
+      image: "/betlanationalpark.jpg",
       description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
     },
     {
       id: 3,
       name: "Netarhat Hills",
-      image: netarhatHills,
+    image: "/netarhat.jpg",
       description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
     }
   ];

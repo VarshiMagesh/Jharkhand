@@ -147,19 +147,21 @@ const Chatbot = () => {
     <>
       {/* Chatbot Toggle Button */}
       <Button
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-glow animate-pulse-glow transition-bounce z-50",
-          "primary-gradient hover:scale-110"
-        )}
-        size="icon"
-      >
-        {isOpen ? (
-          <X className="h-6 w-6 text-white" />
-        ) : (
-          <MessageCircle className="h-6 w-6 text-white" />
-        )}
-      </Button>
+  onClick={() => setIsOpen(!isOpen)}
+  className={cn(
+    "fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-glow animate-pulse-glow transition-bounce z-50",
+    "primary-gradient hover:scale-110",
+    "hero-gradient text-white shadow-nature mt-4"
+  )}
+  size="icon"
+>
+  {isOpen ? (
+    <X className="h-6 w-6 text-white" />
+  ) : (
+    <MessageCircle className="h-6 w-6 text-white" />
+  )}
+</Button>
+
 
       {/* Chatbot Window */}
       {isOpen && (
@@ -175,7 +177,7 @@ const Chatbot = () => {
           height: `${windowSize.height}px`
         }}>
           {/* Header */}
-          <div className="primary-gradient p-4 flex-shrink-0">
+          <div className="hero-gradient shadow-nature p-4 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-white/20">
