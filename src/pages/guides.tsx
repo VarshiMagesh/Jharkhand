@@ -77,7 +77,8 @@ const Guides = () => {
         .from('vendor_applications')
         .select('*')
         .eq('service_type', 'guide')
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .eq('status', 'approved');
 
       if (error) throw error;
       setGuides(data || []);
@@ -484,3 +485,4 @@ const Guides = () => {
 };
 
 export default Guides;
+
