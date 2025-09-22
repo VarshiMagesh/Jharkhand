@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"; // 1. Import the Link component
+import { Link } from "react-router-dom"; // This is already correctly imported
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -20,7 +20,7 @@ const DestinationsGrid = () => {
     {
       id: 3,
       name: "Netarhat Hills",
-    image: "/netarhat.jpg",
+      image: "/netarhat.jpg",
       description: "A quick glimpse. Find details, routes, and safety tips in Destinations.",
     }
   ];
@@ -32,7 +32,6 @@ const DestinationsGrid = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white">
             Featured Destinations
           </h2>
-          {/* 2. Wrap the "See all" button in a Link */}
           <Link to="/destinations">
             <Button variant="ghost" className="text-accent hover:text-accent-foreground">
               See all
@@ -61,10 +60,15 @@ const DestinationsGrid = () => {
                   {destination.description}
                 </p>
                 
-                <Button variant="ghost" className="text-accent hover:text-accent-foreground p-0">
-                  View more
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                {/* === MODIFICATION START === */}
+                <Link to={`/destinations/${destination.id}`}>
+                  <Button variant="ghost" className="text-accent hover:text-accent-foreground p-0">
+                    View more
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+                {/* === MODIFICATION END === */}
+
               </CardContent>
             </Card>
           ))}

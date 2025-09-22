@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "../components/ui/use-toast";
 import Footer from "@/components/Footer";
+// ADDED: Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 // Import the guide images
 import guideRajesh from "../assets/guide-rajesh.jpg";
 import guidePriya from "../assets/guide-priya.jpg";
@@ -73,245 +75,259 @@ const allSpecialties = ["Wildlife", "Trekking", "Culture", "History", "Cuisine",
 const allLanguages = ["Hindi", "English", "Santhali", "Bengali"];
 
 const Guides = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [specialtyFilter, setSpecialtyFilter] = useState("all");
-  const [languageFilter, setLanguageFilter] = useState("all");
-  const [selectedGuide, setSelectedGuide] = useState<any | null>(null);
-  const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
-  const [isCostModalOpen, setCostModalOpen] = useState(false);
-  const [isBookingModalOpen, setBookingModalOpen] = useState(false);
-  const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState<any | null>(null);
+    // ADDED: useNavigate hook
+    const navigate = useNavigate();
 
-  const [bookingDate, setBookingDate] = useState<Date | undefined>(new Date());
-  const [tourDuration, setTourDuration] = useState("2-3");
-  const { toast } = useToast();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [specialtyFilter, setSpecialtyFilter] = useState("all");
+    const [languageFilter, setLanguageFilter] = useState("all");
+    const [selectedGuide, setSelectedGuide] = useState<any | null>(null);
+    const [isReviewsModalOpen, setReviewsModalOpen] = useState(false);
+    const [isCostModalOpen, setCostModalOpen] = useState(false);
+    const [isBookingModalOpen, setBookingModalOpen] = useState(false);
+    const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
+    const [bookingDetails, setBookingDetails] = useState<any | null>(null);
 
-  const handleReviewsClick = (guide) => {
-    setSelectedGuide(guide);
-    setReviewsModalOpen(true);
-  };
+    const [bookingDate, setBookingDate] = useState<Date | undefined>(new Date());
+    const [tourDuration, setTourDuration] = useState("2-3");
+    const { toast } = useToast();
 
-  const handleCostClick = (guide) => {
-    setSelectedGuide(guide);
-    setCostModalOpen(true);
-  };
-  
-  const handleBookNowClick = (guide) => {
-    setSelectedGuide(guide);
-    setBookingModalOpen(true);
-  };
-  
-  const handleBookingSubmit = (e) => {
-    e.preventDefault();
-    setBookingDetails({
-      guideName: selectedGuide.name,
-      date: bookingDate,
-      duration: tourDuration
-    });
-    setBookingModalOpen(false);
-    setConfirmationModalOpen(true);
-  };
+    const handleReviewsClick = (guide) => {
+        setSelectedGuide(guide);
+        setReviewsModalOpen(true);
+    };
 
-  const totalCost = useMemo(() => {
-    if (!selectedGuide) return 0;
-    let numberOfDays = 0;
-    if (tourDuration === '8+') {
-      numberOfDays = 7;
-    } else {
-      numberOfDays = parseInt(tourDuration.split('-')[0], 10);
-    }
-    const cost = selectedGuide.cost.perDay * numberOfDays;
-    return cost.toFixed(2);
-  }, [selectedGuide, tourDuration]);
+    const handleCostClick = (guide) => {
+        setSelectedGuide(guide);
+        setCostModalOpen(true);
+    };
+    
+    const handleBookNowClick = (guide) => {
+        setSelectedGuide(guide);
+        setBookingModalOpen(true);
+    };
+    
+    // UPDATED: handleBookingSubmit now navigates to the UPI payment route
+    const handleBookingSubmit = (e) => {
+        e.preventDefault();
+        const cost = totalCost; // Assuming totalCost is a string from useMemo (e.g., "6000.00")
+        
+        // Use navigate to redirect to the /upi route with query parameters
+        navigate(`/upi?amount=${cost}&description=Guide Booking&type=guide&name=${encodeURIComponent(selectedGuide.name)}`);
+        
+        // The previous booking details logic is now commented out/removed
+        // as the final step is payment via navigation.
+        /*
+        setBookingDetails({
+          guideName: selectedGuide.name,
+          date: bookingDate,
+          duration: tourDuration
+        });
+        setBookingModalOpen(false);
+        setConfirmationModalOpen(true);
+        */
+    };
 
-  const filteredGuides = useMemo(() => {
-    return guidesData.filter(guide => {
-      const nameMatch = guide.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const specialtyMatch = specialtyFilter === 'all' || guide.specialties.includes(specialtyFilter);
-      const languageMatch = languageFilter === 'all' || guide.languages.includes(languageFilter);
-      return nameMatch && specialtyMatch && languageMatch;
-    });
-  }, [searchTerm, specialtyFilter, languageFilter]);
+    const totalCost = useMemo(() => {
+        if (!selectedGuide) return 0;
+        let numberOfDays = 0;
+        if (tourDuration === '8+') {
+            numberOfDays = 7;
+        } else {
+            numberOfDays = parseInt(tourDuration.split('-')[0], 10);
+        }
+        const cost = selectedGuide.cost.perDay * numberOfDays;
+        return cost.toFixed(2);
+    }, [selectedGuide, tourDuration]);
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <header className="relative pt-28 pb-16 bg-gradient-to-b from-slate-50 to-background overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-            <div className="absolute -top-24 -right-24 w-72 h-72 bg-accent/10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-green-500/10 rounded-full blur-3xl"></div>
+    const filteredGuides = useMemo(() => {
+        return guidesData.filter(guide => {
+            const nameMatch = guide.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const specialtyMatch = specialtyFilter === 'all' || guide.specialties.includes(specialtyFilter);
+            const languageMatch = languageFilter === 'all' || guide.languages.includes(languageFilter);
+            return nameMatch && specialtyMatch && languageMatch;
+        });
+    }, [searchTerm, specialtyFilter, languageFilter]);
+
+    return (
+        <div className="min-h-screen bg-background">
+            <Navigation />
+            
+            <header className="relative pt-28 pb-16 bg-gradient-to-b from-slate-50 to-background overflow-hidden">
+                <div className="absolute inset-0 -z-10">
+                    <div className="absolute -top-24 -right-24 w-72 h-72 bg-accent/10 rounded-full blur-3xl"></div>
+                    <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-green-500/10 rounded-full blur-3xl"></div>
+                </div>
+                <div className="container mx-auto px-4 text-center relative">
+                    <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+                        Meet Our <span className="text-accent">Verified Guides</span>
+                    </h1>
+                    <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                        Explore Jharkhand with our certified, experienced, and passionate local guides. Find the perfect expert for your adventure.
+                    </p>
+                </div>
+            </header>
+
+            <main className="container mx-auto px-4 py-16">
+                <Card className="mb-12 shadow-sm">
+                    <CardContent className="p-6 flex flex-col md:flex-row gap-4 items-center">
+                        <div className="relative flex-grow w-full">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                            <Input 
+                                placeholder="Search guide by name..." 
+                                className="pl-10"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex gap-4 w-full md:w-auto">
+                            <Select value={specialtyFilter} onValueChange={setSpecialtyFilter}>
+                                <SelectTrigger className="w-full md:w-[180px]"><MapPin className="h-4 w-4 mr-2" /><SelectValue placeholder="Filter by specialty" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Specialties</SelectItem>
+                                    {allSpecialties.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                            <Select value={languageFilter} onValueChange={setLanguageFilter}>
+                                <SelectTrigger className="w-full md:w-[180px]"><Languages className="h-4 w-4 mr-2" /><SelectValue placeholder="Filter by language" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Languages</SelectItem>
+                                    {allLanguages.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredGuides.map((guide) => (
+                        <Card key={guide.name} className="overflow-hidden group hover:shadow-lg transition-shadow flex flex-col">
+                            <div className="relative">
+                                <img src={guide.image} alt={guide.name} className="w-full h-64 object-cover" />
+                                <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 text-sm font-semibold">
+                                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                                    <span>{guide.rating.toFixed(1)}</span>
+                                </div>
+                            </div>
+                            <CardContent className="p-6 flex flex-col flex-grow">
+                                <h3 className="text-2xl font-bold text-foreground mb-2">{guide.name}</h3>
+                                <p className="text-sm text-muted-foreground mb-4">{guide.experience} years of experience | {guide.reviews} reviews</p>
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {guide.specialties.map(spec => <Badge key={spec} variant="secondary">{spec}</Badge>)}
+                                </div>
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {guide.languages.map(lang => <Badge key={lang} variant="outline">{lang}</Badge>)}
+                                </div>
+                                <p className="text-muted-foreground text-sm mb-6 h-20 overflow-hidden">{guide.bio}</p>
+                                <div className="mt-auto space-y-3">
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" className="w-full" onClick={() => handleReviewsClick(guide)}>Reviews</Button>
+                                        <Button variant="outline" className="w-full" onClick={() => handleCostClick(guide)}>Cost Details</Button>
+                                    </div>
+                                    <Button className="w-full hero-gradient text-white shadow-nature" onClick={() => handleBookNowClick(guide)}>
+                                        <BookMarked className="w-4 h-4 mr-2" />
+                                        Book Now
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            </main>
+
+            <Dialog open={isReviewsModalOpen} onOpenChange={setReviewsModalOpen}>
+                <DialogContent className="bg-background sm:max-w-xl">
+                    {selectedGuide && (
+                        <>
+                            <DialogHeader><DialogTitle className="text-2xl">Reviews for {selectedGuide.name}</DialogTitle><DialogDescription className="text-base">Read what other travelers have to say.</DialogDescription></DialogHeader>
+                            <div className="py-4 space-y-6 max-h-[60vh] overflow-y-auto">
+                                {selectedGuide.sampleReviews.map((review, index) => (
+                                    <div key={index} className="border-b pb-4 last:border-b-0">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <div className="flex">
+                                                {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-500 fill-yellow-500" />)}
+                                                {[...Array(5 - review.rating)].map((_, i) => <Star key={i} className="w-5 h-5 text-muted-foreground/50" />)}
+                                            </div>
+                                            <span className="font-bold text-lg">{review.user}</span>
+                                        </div>
+                                        <p className="text-muted-foreground italic text-base">"{review.comment}"</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={isCostModalOpen} onOpenChange={setCostModalOpen}>
+            <DialogContent className="bg-background sm:max-w-lg">
+                {selectedGuide && (
+                    <>
+                        <DialogHeader><DialogTitle className="text-2xl">Cost Details for {selectedGuide.name}</DialogTitle><DialogDescription className="text-base">Pricing and package information.</DialogDescription></DialogHeader>
+                        <div className="py-4 space-y-4 text-base">
+                            <div className="flex justify-between items-center"><p className="text-muted-foreground">Cost per Day:</p><p className="font-bold text-lg flex items-center"><IndianRupee size={18} />{selectedGuide.cost.perDay}</p></div>
+                            <div className="flex justify-between items-center"><p className="text-muted-foreground">Cost per Hour:</p><p className="font-bold text-lg flex items-center"><IndianRupee size={18} />{selectedGuide.cost.perHour}</p></div>
+                            <div className="mt-6 pt-4 border-t"><p className="font-semibold text-lg">Group Discounts:</p><p className="text-muted-foreground text-base">{selectedGuide.cost.groupDiscount}</p></div>
+                        </div>
+                    </>
+                )}
+            </DialogContent>
+            </Dialog>
+
+            <Dialog open={isBookingModalOpen} onOpenChange={setBookingModalOpen}>
+                <DialogContent className="bg-background sm:max-w-4xl">
+                    {selectedGuide && (
+                        <>
+                            <DialogHeader><DialogTitle className="text-3xl font-bold">Book Your Tour with {selectedGuide.name}</DialogTitle><DialogDescription>Please fill out the details below to schedule your tour.</DialogDescription></DialogHeader>
+                            <form onSubmit={handleBookingSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
+                                <div className="space-y-4">
+                                    <Input placeholder="Full Name" required /><Input type="email" placeholder="Email Address" required /><Input placeholder="Phone Number" required />
+                                    <Select defaultValue="1"><SelectTrigger><Users className="w-4 h-4 mr-2" /><SelectValue/></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="1">1 Traveler</SelectItem><SelectItem value="2">2 Travelers</SelectItem><SelectItem value="3">3 Travelers</SelectItem><SelectItem value="4">4 Travelers</SelectItem><SelectItem value="5">5+ Travelers</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <Select value={tourDuration} onValueChange={setTourDuration}>
+                                        <SelectTrigger><Clock className="w-4 h-4 mr-2" /><SelectValue placeholder="Select duration"/></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="2-3">2-3 Days</SelectItem><SelectItem value="4-5">4-5 Days</SelectItem><SelectItem value="6-7">6-7 Days</SelectItem><SelectItem value="8+">More than a week</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex flex-col">
+                                    <Calendar mode="single" selected={bookingDate} onSelect={setBookingDate} className="rounded-md border self-center"/>
+                                        <div className="mt-4 pt-4 border-t">
+                                            <h4 className="text-lg font-semibold mb-2">Total Estimated Cost</h4>
+                                            <div className="text-4xl font-bold text-accent flex items-center"><IndianRupee /> {totalCost}</div>
+                                            <p className="text-sm text-muted-foreground">for a {tourDuration.replace('-', ' to ').replace('+', '')} day tour starting {bookingDate?.toLocaleDateString()}</p>
+                                        </div>
+                                </div>
+                                <div className="md:col-span-2"><Button type="submit" size="lg" className="w-full hero-gradient text-white shadow-nature">Proceed to Payment</Button></div>
+                            </form>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
+            
+            {/* The Confirmation Modal is no longer needed in this flow, but kept for completeness based on the original code structure. */}
+            <Dialog open={isConfirmationModalOpen} onOpenChange={setConfirmationModalOpen}>
+                <DialogContent className="bg-background sm:max-w-md">
+                    {bookingDetails && (
+                        <div className="text-center p-6">
+                            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                            <h2 className="text-2xl font-bold text-foreground mb-2">Booking Request Submitted!</h2>
+                            <p className="text-muted-foreground mb-6">
+                                {bookingDetails.guideName} will contact you within 2 hours to confirm availability and details.
+                            </p>
+                            <Button className="w-full mt-6" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+            <Footer />
+
         </div>
-        <div className="container mx-auto px-4 text-center relative">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Meet Our <span className="text-accent">Verified Guides</span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Explore Jharkhand with our certified, experienced, and passionate local guides. Find the perfect expert for your adventure.
-          </p>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-16">
-        <Card className="mb-12 shadow-sm">
-          <CardContent className="p-6 flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative flex-grow w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                placeholder="Search guide by name..." 
-                className="pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-4 w-full md:w-auto">
-              <Select value={specialtyFilter} onValueChange={setSpecialtyFilter}>
-                <SelectTrigger className="w-full md:w-[180px]"><MapPin className="h-4 w-4 mr-2" /><SelectValue placeholder="Filter by specialty" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Specialties</SelectItem>
-                  {allSpecialties.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                </SelectContent>
-              </Select>
-              <Select value={languageFilter} onValueChange={setLanguageFilter}>
-                <SelectTrigger className="w-full md:w-[180px]"><Languages className="h-4 w-4 mr-2" /><SelectValue placeholder="Filter by language" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Languages</SelectItem>
-                  {allLanguages.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredGuides.map((guide) => (
-            <Card key={guide.name} className="overflow-hidden group hover:shadow-lg transition-shadow flex flex-col">
-              <div className="relative">
-                <img src={guide.image} alt={guide.name} className="w-full h-64 object-cover" />
-                <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 text-sm font-semibold">
-                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                  <span>{guide.rating.toFixed(1)}</span>
-                </div>
-              </div>
-              <CardContent className="p-6 flex flex-col flex-grow">
-                <h3 className="text-2xl font-bold text-foreground mb-2">{guide.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{guide.experience} years of experience | {guide.reviews} reviews</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {guide.specialties.map(spec => <Badge key={spec} variant="secondary">{spec}</Badge>)}
-                </div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {guide.languages.map(lang => <Badge key={lang} variant="outline">{lang}</Badge>)}
-                </div>
-                <p className="text-muted-foreground text-sm mb-6 h-20 overflow-hidden">{guide.bio}</p>
-                <div className="mt-auto space-y-3">
-                  <div className="flex gap-2">
-                     <Button variant="outline" className="w-full" onClick={() => handleReviewsClick(guide)}>Reviews</Button>
-                     <Button variant="outline" className="w-full" onClick={() => handleCostClick(guide)}>Cost Details</Button>
-                  </div>
-                  <Button className="w-full hero-gradient text-white shadow-nature" onClick={() => handleBookNowClick(guide)}>
-                    <BookMarked className="w-4 h-4 mr-2" />
-                    Book Now
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </main>
-
-      <Dialog open={isReviewsModalOpen} onOpenChange={setReviewsModalOpen}>
-        <DialogContent className="bg-background sm:max-w-xl">
-          {selectedGuide && (
-            <>
-              <DialogHeader><DialogTitle className="text-2xl">Reviews for {selectedGuide.name}</DialogTitle><DialogDescription className="text-base">Read what other travelers have to say.</DialogDescription></DialogHeader>
-              <div className="py-4 space-y-6 max-h-[60vh] overflow-y-auto">
-                {selectedGuide.sampleReviews.map((review, index) => (
-                  <div key={index} className="border-b pb-4 last:border-b-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="flex">
-                        {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-500 fill-yellow-500" />)}
-                        {[...Array(5 - review.rating)].map((_, i) => <Star key={i} className="w-5 h-5 text-muted-foreground/50" />)}
-                      </div>
-                      <span className="font-bold text-lg">{review.user}</span>
-                    </div>
-                    <p className="text-muted-foreground italic text-base">"{review.comment}"</p>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isCostModalOpen} onOpenChange={setCostModalOpen}>
-       <DialogContent className="bg-background sm:max-w-lg">
-          {selectedGuide && (
-            <>
-              <DialogHeader><DialogTitle className="text-2xl">Cost Details for {selectedGuide.name}</DialogTitle><DialogDescription className="text-base">Pricing and package information.</DialogDescription></DialogHeader>
-              <div className="py-4 space-y-4 text-base">
-                 <div className="flex justify-between items-center"><p className="text-muted-foreground">Cost per Day:</p><p className="font-bold text-lg flex items-center"><IndianRupee size={18} />{selectedGuide.cost.perDay}</p></div>
-                 <div className="flex justify-between items-center"><p className="text-muted-foreground">Cost per Hour:</p><p className="font-bold text-lg flex items-center"><IndianRupee size={18} />{selectedGuide.cost.perHour}</p></div>
-                 <div className="mt-6 pt-4 border-t"><p className="font-semibold text-lg">Group Discounts:</p><p className="text-muted-foreground text-base">{selectedGuide.cost.groupDiscount}</p></div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isBookingModalOpen} onOpenChange={setBookingModalOpen}>
-        <DialogContent className="bg-background sm:max-w-4xl">
-          {selectedGuide && (
-            <>
-              <DialogHeader><DialogTitle className="text-3xl font-bold">Book Your Tour with {selectedGuide.name}</DialogTitle><DialogDescription>Please fill out the details below to schedule your tour.</DialogDescription></DialogHeader>
-              <form onSubmit={handleBookingSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
-                <div className="space-y-4">
-                  <Input placeholder="Full Name" required /><Input type="email" placeholder="Email Address" required /><Input placeholder="Phone Number" required />
-                  <Select defaultValue="1"><SelectTrigger><Users className="w-4 h-4 mr-2" /><SelectValue/></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 Traveler</SelectItem><SelectItem value="2">2 Travelers</SelectItem><SelectItem value="3">3 Travelers</SelectItem><SelectItem value="4">4 Travelers</SelectItem><SelectItem value="5">5+ Travelers</SelectItem>
-                    </SelectContent>
-                  </Select>
-                   <Select value={tourDuration} onValueChange={setTourDuration}>
-                    <SelectTrigger><Clock className="w-4 h-4 mr-2" /><SelectValue placeholder="Select duration"/></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2-3">2-3 Days</SelectItem><SelectItem value="4-5">4-5 Days</SelectItem><SelectItem value="6-7">6-7 Days</SelectItem><SelectItem value="8+">More than a week</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col">
-                   <Calendar mode="single" selected={bookingDate} onSelect={setBookingDate} className="rounded-md border self-center"/>
-                    <div className="mt-4 pt-4 border-t">
-                      <h4 className="text-lg font-semibold mb-2">Total Estimated Cost</h4>
-                      <div className="text-4xl font-bold text-accent flex items-center"><IndianRupee /> {totalCost}</div>
-                      <p className="text-sm text-muted-foreground">for a {tourDuration.replace('-', ' to ').replace('+', '')} day tour starting {bookingDate?.toLocaleDateString()}</p>
-                    </div>
-                </div>
-                 <div className="md:col-span-2"><Button type="submit" size="lg" className="w-full hero-gradient text-white shadow-nature">Confirm Booking</Button></div>
-              </form>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-      
-      <Dialog open={isConfirmationModalOpen} onOpenChange={setConfirmationModalOpen}>
-        <DialogContent className="bg-background sm:max-w-md">
-           {bookingDetails && (
-              <div className="text-center p-6">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-foreground mb-2">Booking Request Submitted!</h2>
-                <p className="text-muted-foreground mb-6">
-                  {bookingDetails.guideName} will contact you within 2 hours to confirm availability and details.
-                </p>
-                <Button className="w-full mt-6" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
-              </div>
-           )}
-        </DialogContent>
-      </Dialog>
-        <Footer />
-
-    </div>
-  );
+    );
 };
 
 export default Guides;

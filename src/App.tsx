@@ -16,7 +16,7 @@ import Chatbot from "./components/Chatbot";
 import Accomadation from "./pages/Accomadation";
 // 👇 1. Import the new component
 import ScrollToTop from "@/components/ScrollToTop";
-
+import UPI from "@/pages/UPI"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -38,6 +38,7 @@ const App = () => (
           <Route path="/local-marketplace" element={<LocalMarketplace />} />
           <Route path="/guides" element={<Guides />} />
           <Route path="/accomadation" element={<Accomadation />} />
+          <Route path="/UPI" element={<UPI />} />       
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Chatbot />

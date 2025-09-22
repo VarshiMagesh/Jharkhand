@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -60,17 +61,17 @@ const categories = [...new Set(allProducts.map(p => p.category))];
 
 const ProductCard = ({ item }: { item: any }) => {
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
   const discount = Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100);
-  const totalAmount = item.price * quantity;
-
+  
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
       <div className="aspect-square overflow-hidden relative">
         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
         {discount > 0 && <Badge className="absolute top-2 right-2 bg-red-500 text-white">{discount}% OFF</Badge>}
       </div>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
+      <div className="p-4 flex flex-col flex-grow">
+        <div className="flex items-center justify-between mb-2">
           <Badge variant="secondary">{item.category}</Badge>
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -78,17 +79,16 @@ const ProductCard = ({ item }: { item: any }) => {
             <span className="text-xs text-muted-foreground">({item.reviews})</span>
           </div>
         </div>
-        <CardTitle className="text-lg">{item.name}</CardTitle>
-        <CardDescription className="flex items-center gap-1 text-xs">
+        <CardTitle className="text-lg mb-1">{item.name}</CardTitle>
+        <CardDescription className="flex items-center gap-1 text-xs mb-2">
           <span>by {item.artisan || item.producer}</span><span className="text-muted-foreground">•</span><MapPin className="w-3 h-3" /><span>{item.village || item.location}</span>
         </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground h-10">{item.description}</p>
-        <div className="flex flex-wrap gap-1">
+        <p className="text-sm text-muted-foreground h-10 mb-3">{item.description}</p>
+        <div className="flex flex-wrap gap-1 mb-3">
           {item.features.map((feature: string, idx: number) => (<Badge key={idx} variant="outline" className="text-xs">{feature}</Badge>))}
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex-grow"></div>
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold text-primary">₹{item.price}</span>
             {item.weight && <span className="text-xs text-muted-foreground">({item.weight})</span>}
@@ -112,14 +112,21 @@ const ProductCard = ({ item }: { item: any }) => {
                   <div className="text-sm font-semibold text-primary">₹{item.price}</div>
                 </div>
               </div>
-              <div><Label htmlFor="quantity">Quantity</Label><Input id="quantity" type="number" min="1" max="5" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} /></div>
+              <div><Label htmlFor="quantity">Quantity</Label><Input id="quantity" type="number" min="1" max="5" value={quantity} onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))} /></div>
               <div><Label htmlFor="address">Delivery Address</Label><Textarea id="address" placeholder="Enter your complete address..." /></div>
-              <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg"><span className="font-medium">Total Amount:</span><span className="text-lg font-semibold text-primary">₹{totalAmount}</span></div>
-              <Button className="w-full">Place Order - ₹{totalAmount}</Button>
+              <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg"><span className="font-medium">Total Amount:</span><span className="text-lg font-semibold text-primary">₹{item.price * quantity}</span></div>
+              <Button
+                className="w-full"
+                onClick={() =>
+                  navigate(`/upi?amount=${item.price * quantity}&description=Product Purchase&type=product&name=${encodeURIComponent(item.name)}`)
+                }
+              >
+                Place Order - ₹{item.price * quantity}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
-      </CardContent>
+      </div>
     </Card>
   );
 };
@@ -160,33 +167,39 @@ export default function LocalMarketplacePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground font-sans">
+    <div className="min-h-screen flex flex-col bg-white text-gray-800 font-sans">
       <Navigation />
-      <main id="main" className="flex-1 mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-semibold text-primary">Local Marketplace</h1>
-          <p className="mt-2 text-foreground/90 max-w-2xl">
-            Discover authentic Jharkhand products—from traditional handicrafts to organic produce, directly from local artisans and farmers.
-          </p>
-          <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1"><Award className="w-4 h-4 text-accent" /><span>Authentic products</span></div>
-            <div className="flex items-center gap-1"><Heart className="w-4 h-4 text-accent" /><span>Support local artisans</span></div>
-            <div className="flex items-center gap-1"><Truck className="w-4 h-4 text-accent" /><span>Direct from source</span></div>
-          </div>
-        </header>
+      
+      <header className="bg-slate-50 pt-24 pb-12 px-4 text-center">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          <span className="text-gray-800">Local</span>
+          <span style={{ color: '#F58B2E' }}> Marketplace</span>
+        </h1>
+        <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+          Explore authentic handicrafts and produce, sourced directly from the artisans and farmers of Jharkhand.
+        </p>
+        <div className="flex items-center justify-center gap-x-6 gap-y-2 flex-wrap mt-8 text-sm text-gray-500">
+          <div className="flex items-center gap-1.5"><Award className="w-4 h-4 text-orange-500" /><span>Authentic products</span></div>
+          <div className="flex items-center gap-1.5"><Heart className="w-4 h-4 text-orange-500" /><span>Support local artisans</span></div>
+          <div className="flex items-center gap-1.5"><Truck className="w-4 h-4 text-orange-500" /><span>Direct from source</span></div>
+        </div>
+      </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <aside className="md:col-span-1">
+      {/* MODIFIED MAIN SECTION */}
+      <main id="main" className="flex-1 w-full py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          
+          <aside className="lg:col-span-1">
             <div className="sticky top-24">
-              <h3 className="text-lg font-semibold mb-4 flex items-center"><Filter className="w-4 h-4 mr-2" />Filters</h3>
+              <h3 className="text-xl font-semibold mb-4 flex items-center"><Filter className="w-5 h-5 mr-2" />Filters</h3>
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-medium mb-2">Category</h4>
+                  <h4 className="font-medium mb-3">Category</h4>
                   <div className="space-y-2">
                     {categories.map(category => (
                       <div key={category} className="flex items-center space-x-2">
                         <Checkbox id={category} onCheckedChange={() => handleCategoryChange(category)} checked={selectedCategories.includes(category)} />
-                        <Label htmlFor={category} className="font-normal">{category}</Label>
+                        <Label htmlFor={category} className="font-normal cursor-pointer">{category}</Label>
                       </div>
                     ))}
                   </div>
@@ -200,8 +213,8 @@ export default function LocalMarketplacePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">Rating</h4>
-                  <div className="flex space-x-1">
+                  <h4 className="font-medium mb-3">Rating</h4>
+                  <div className="flex space-x-2">
                     {[4, 3, 2, 1].map(rating => (
                       <Button key={rating} variant={minRating === rating ? "default" : "outline"} size="sm" onClick={() => setMinRating(minRating === rating ? 0 : rating)}>
                         {rating} <Star className="w-3 h-3 ml-1 fill-current" />+
@@ -213,7 +226,7 @@ export default function LocalMarketplacePage() {
             </div>
           </aside>
 
-          <div className="md:col-span-3">
+          <div className="lg:col-span-3">
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-6">
               <Input
                 type="text"
@@ -236,13 +249,13 @@ export default function LocalMarketplacePage() {
             </div>
             
             {filteredAndSortedProducts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredAndSortedProducts.map((item) => <ProductCard key={item.id} item={item} />)}
                 </div>
             ) : (
-                <div className="text-center py-20 text-muted-foreground">
+                <div className="text-center py-20 text-muted-foreground bg-gray-50 rounded-lg">
                     <p className="text-lg font-medium">No products found</p>
-                    <p className="text-sm">Try adjusting your filters.</p>
+                    <p className="text-sm">Try adjusting your search or filters.</p>
                 </div>
             )}
           </div>

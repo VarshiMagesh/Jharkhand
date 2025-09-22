@@ -3,16 +3,16 @@ import { Card, CardContent } from "@/components/ui/card";
 const FestivalsSection = () => {
   const festivals = [
     {
-      name: "Sarhul",
-      description: "Spring festival celebrating nature and community among tribal groups.",
+      name: "Chhau Dance",
+      description: "Chhau is a semi-classical Indian dance with martial and folk traditions.",
     },
     {
-      name: "Karam",
-      description: "Harvest festival honoring the Karam tree with song and dance.",
+      name: "Sohrai Songs",
+      description: "These folk songs are an integral part of the Sohrai harvest festival.",
     },
     {
-      name: "Tusu Parab",
-      description: "Mid-winter folk festival with vibrant songs by the rivers.",
+      name: "Paika Dance",
+      description: "Paika Dance is a martial folk dance that re-enacts ancient battles",
     }
   ];
 
