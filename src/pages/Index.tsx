@@ -5,6 +5,7 @@ import DestinationsGrid from "@/components/DestinationsGrid";
 import FestivalsSection from "@/components/FestivalsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer1";
+import WeeklyWeather from "@/components/WeeklyWeather";
 
 // Import the background image
 import heroImage from "@/assets/hero-jharkhand.jpg";
@@ -23,6 +24,7 @@ const Index = () => {
         <HighlightsSection />
         <DestinationsGrid />
         <FestivalsSection />
+        <WeeklyWeather />
         <TestimonialsSection />
         <Footer />
       </main>

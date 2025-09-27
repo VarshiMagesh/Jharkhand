@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Phone, Mail, Star, CheckCircle, Users, Clock, Home } from "lucide-react";
 import Footer from "@/components/Footer";
 
+import CurrencyConverterCard from "@/components/CurrencyConverterCard";
+
 const whyChooseUs = [
   {
     icon: Star,
@@ -36,52 +38,57 @@ const PlanJourney = () => {
       
       {/* Header Section */}
       <section className="pt-24 pb-12 nature-gradient">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-              AI-Powered <span className="text-accent">Itinerary Planner</span>
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              Experience the future of travel planning. Our advanced AI creates personalized Jharkhand adventures 
-              based on your exact preferences, interests, and budget in minutes.
-            </p>
-            
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link to="/Accomadation">
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="px-8 py-3 font-semibold border-2 border-accent text-accent hover:bg-accent hover:text-white transition-all duration-300 hover:scale-105"
-                >
-                  <Home className="w-5 h-5 mr-2" />
-                  Accommodations
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-accent">500+</div>
-                <div className="text-sm text-muted-foreground">Destinations</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-accent">10K+</div>
-                <div className="text-sm text-muted-foreground">Happy Travelers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-accent">95%</div>
-                <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-accent">2 Min</div>
-                <div className="text-sm text-muted-foreground">Planning Time</div>
-              </div>
-            </div>
-          </div>
+  <div className="container mx-auto px-4 lg:px-8">
+    <div className="text-center max-w-4xl mx-auto">
+      <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+        AI-Powered <span className="text-accent">Itinerary Planner</span>
+      </h1>
+      <p className="text-lg text-gray-700 md:text-gray-800 leading-relaxed mb-8">
+        Experience the future of travel planning. Our advanced AI creates personalized Jharkhand adventures 
+        based on your exact preferences, interests, and budget in minutes.  
+        Now with a built-in <span className="font-semibold text-accent">Currency Converter </span>  
+         to instantly calculate your travel costs in Indian Rupees.
+      </p>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+        <Link to="/Accomadation">
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="px-8 py-3 font-semibold border-2 border-accent text-accent hover:bg-accent hover:text-white transition-all duration-300 hover:scale-105"
+          >
+            <Home className="w-5 h-5 mr-2" />
+            Accommodations
+          </Button>
+        </Link>
+
+        
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-accent">500+</div>
+          <div className="text-sm text-gray-700 md:text-gray-800">Destinations</div>
         </div>
-      </section>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-accent">10K+</div>
+          <div className="text-sm text-gray-700 md:text-gray-800">Happy Travelers</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-accent">95%</div>
+          <div className="text-sm text-gray-700 md:text-gray-800">Satisfaction Rate</div>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-accent">2 Min</div>
+          <div className="text-sm text-gray-700 md:text-gray-800">Planning Time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <div className="container mx-auto px-4 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
@@ -99,7 +106,7 @@ const PlanJourney = () => {
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4">Quick Access</h3>
                 <div className="space-y-3">
-                  <Link to="/accommodation" className="block">
+                  <Link to="/Accomadation" className="block">
                     <Button variant="outline" className="w-full justify-start text-left border-accent/30 hover:bg-accent/10">
                       <Home className="w-4 h-4 mr-2" />
                       Browse Accommodations
@@ -121,6 +128,8 @@ const PlanJourney = () => {
               </CardContent>
             </Card>
             
+            
+
             {/* Contact Info */}
             <Card className="shadow-card">
               <CardContent className="p-6">
@@ -188,6 +197,9 @@ const PlanJourney = () => {
                 </div>
               </CardContent>
             </Card>
+
+            <CurrencyConverterCard />
+
           </div>
         </div>
 
