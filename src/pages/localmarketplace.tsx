@@ -8,17 +8,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { ShoppingBag, Star, MapPin, Truck, Heart, Award, Filter, ShoppingCart } from "lucide-react";
+import { ShoppingBag, Star, MapPin, Truck, Heart, Award, Filter, ShoppingCart, Brush, Utensils, Leaf, Shirt, Gem, X } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-// --- INTERFACES ---
+// --- INTERFACES & TYPES ---
 interface MarketplaceItem {
   id: string;
   name: string;
@@ -40,23 +38,26 @@ interface MarketplaceItem {
   image_path: string | null;
 }
 
-// --- DATA FETCHING FUNCTIONS ---
-const fetchMarketplaceItems = async (): Promise<MarketplaceItem[]> => {
-  const { data, error } = await supabase
-    .from('marketplace')
-    .select('*')
-    .eq('status', 'approved')
-    .order('created_at', { ascending: false });
+type Filters = {
+  categories: string[];
+  priceRange: [number, number];
+  minRating: number;
+};
 
+const initialFilters: Filters = {
+    categories: [],
+    priceRange: [0, 6000],
+    minRating: 0,
+};
+
+// --- DATA FETCHING & HELPERS ---
+const fetchMarketplaceItems = async (): Promise<MarketplaceItem[]> => {
+  const { data, error } = await supabase.from('marketplace').select('*').eq('status', 'approved').order('created_at', { ascending: false });
   if (error) {
     console.error('Error fetching marketplace items:', error);
     return [];
   }
-
-  return (data || []).map(item => ({
-    ...item,
-    type: item.type as 'Handicraft' | 'Produce' | 'Textile'
-  }));
+  return (data || []).map(item => ({ ...item, type: item.type as 'Handicraft' | 'Produce' | 'Textile' }));
 };
 
 const getImageUrl = (imagePath: string | null) => {
@@ -65,19 +66,26 @@ const getImageUrl = (imagePath: string | null) => {
   return data.publicUrl;
 };
 
+const categoryIcons: { [key: string]: React.ElementType } = {
+  "Art": Brush,
+  "Metal Craft": Gem,
+  "Food": Utensils,
+  "Herbal": Leaf,
+  "Textile": Shirt,
+};
+
+// --- CHILD COMPONENTS ---
+
 const ProductCard = ({ item }: { item: MarketplaceItem }) => {
   const [quantity, setQuantity] = useState(1);
-  
   const { toast } = useToast();
   const navigate = useNavigate();
   const discount = item.original_price ? Math.round(((item.original_price - item.price) / item.original_price) * 100) : 0;
-  
- 
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col group bg-white">
       <div className="aspect-square overflow-hidden relative">
-        <img src={getImageUrl(item.image_path)} alt={item.name} className="w-full h-full object-cover" />
+        <img src={getImageUrl(item.image_path)} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
         {discount > 0 && <Badge className="absolute top-2 right-2 bg-red-500 text-white">{discount}% OFF</Badge>}
       </div>
       <div className="p-4 flex flex-col flex-grow">
@@ -124,25 +132,13 @@ const ProductCard = ({ item }: { item: MarketplaceItem }) => {
               </div>
               <div>
                 <Label htmlFor="quantity">Quantity</Label>
-                <Input 
-                  id="quantity" 
-                  type="number" 
-                  min="1" 
-                  max="10" 
-                  value={quantity} 
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))} 
-                />
+                <Input id="quantity" type="number" min="1" max="10" value={quantity} onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))} />
               </div>
               <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg">
                 <span className="font-medium">Total:</span>
                 <span className="text-lg font-semibold text-primary">₹{item.price * quantity}</span>
               </div>
-              <Button
-                className="w-full"
-                
-              >
-                Add to Cart - ₹{item.price * quantity}
-              </Button>
+              <Button className="w-full">Add to Cart - ₹{item.price * quantity}</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -151,18 +147,124 @@ const ProductCard = ({ item }: { item: MarketplaceItem }) => {
   );
 };
 
+const FilterSidebar = ({ allCategories, currentFilters, onApplyFilters }: { allCategories: string[], currentFilters: Filters, onApplyFilters: (filters: Filters) => void }) => {
+  const [tempCategories, setTempCategories] = useState<string[]>(currentFilters.categories);
+  const [tempPriceRange, setTempPriceRange] = useState<[number, number]>(currentFilters.priceRange);
+  const [tempMinRating, setTempMinRating] = useState<number>(currentFilters.minRating);
+
+  useEffect(() => {
+    setTempCategories(currentFilters.categories);
+    setTempPriceRange(currentFilters.priceRange);
+    setTempMinRating(currentFilters.minRating);
+  }, [currentFilters]);
+
+  const handleCategoryClick = (category: string) => {
+    setTempCategories(prev =>
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
+    );
+  };
+  
+  const handleRatingClick = (rating: number) => {
+      setTempMinRating(prev => prev === rating ? 0 : rating);
+  }
+
+  const handleClear = () => {
+      setTempCategories(initialFilters.categories);
+      setTempPriceRange(initialFilters.priceRange);
+      setTempMinRating(initialFilters.minRating);
+  }
+
+  const handleApply = () => {
+    onApplyFilters({
+      categories: tempCategories,
+      priceRange: tempPriceRange,
+      minRating: tempMinRating,
+    });
+  };
+  
+  const ratingOptions = [4, 3, 2, 1];
+
+  return (
+    <Card className="shadow-md bg-[#FAF7F2] border-[#E8E0D5]">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center text-[#F58B2E]">Filters</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Category */}
+        <div>
+          <Label className="text-lg font-semibold text-[#5C3A21] mb-3 block">Category</Label>
+          <div className="flex flex-wrap gap-2">
+            {allCategories.map(category => {
+              const Icon = categoryIcons[category] || Award;
+              const isSelected = tempCategories.includes(category);
+              return (
+                <Button key={category} onClick={() => handleCategoryClick(category)} variant={isSelected ? "default" : "outline"} className={`rounded-full h-9 px-4 ${isSelected ? 'bg-[#F58B2E] text-white border-[#F58B2E]' : 'bg-white/50 border-[#E8E0D5] text-gray-700 hover:bg-orange-50'}`}>
+                  <Icon className="w-4 h-4 mr-2" /> {category}
+                </Button>
+              )
+            })}
+          </div>
+        </div>
+        
+        {/* Price Range */}
+        <div>
+          <Label className="text-lg font-semibold text-[#5C3A21] mb-2 block">Price Range</Label>
+          <Slider 
+            value={tempPriceRange} 
+            onValueChange={(value) => setTempPriceRange(value as [number, number])} 
+            max={6000} 
+            step={100} 
+            className="[&>span:first-child]:h-2 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-[#F58B2E] [&>span:first-child>span]:to-[#FFAD60] [&>a]:w-6 [&>a]:h-6 [&>a]:bg-white [&>a]:border-2 [&>a]:border-[#F58B2E] [&>a]:relative [&>a:before]:content-['₹'] [&>a:before]:absolute [&>a:before]:inset-0 [&>a:before]:flex [&>a:before]:items-center [&>a:before]:justify-center [&>a:before]:text-sm [&>a:before]:font-bold [&>a:before]:text-[#F58B2E]"
+          />
+           <div className="flex justify-between text-xs text-muted-foreground mt-2">
+             <span>₹{tempPriceRange[0]}</span>
+             <span>₹{tempPriceRange[1]}</span>
+           </div>
+        </div>
+
+        {/* Rating */}
+        <div>
+            <Label className="text-lg font-semibold text-[#5C3A21] mb-3 block">Rating</Label>
+            <div className="space-y-2">
+                {ratingOptions.map(rating => {
+                    const isSelected = tempMinRating === rating;
+                    return (
+                         <Button key={rating} onClick={() => handleRatingClick(rating)} variant={isSelected ? "default" : "outline"} className={`w-full justify-start h-11 ${isSelected ? 'bg-[#F58B2E] text-white border-[#F58B2E]' : 'bg-white/50 border-[#E8E0D5] text-gray-700 hover:bg-orange-50'}`}>
+                            <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className={`w-5 h-5 ${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+                                ))}
+                                <span className="ml-2 text-sm font-medium">& up</span>
+                            </div>
+                        </Button>
+                    )
+                })}
+            </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+            <Button onClick={handleClear} variant="ghost" className="w-1/3 text-gray-600 hover:bg-gray-200">
+                <X className="w-4 h-4 mr-2"/>
+                Clear
+            </Button>
+            <Button onClick={handleApply} className="w-2/3 text-lg h-12 bg-[#F58B2E] hover:bg-[#D7782C]">
+                Apply Filters
+            </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// --- MAIN PAGE COMPONENT ---
 export default function LocalMarketplacePage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 6000]);
-  const [minRating, setMinRating] = useState(0);
+  const [filters, setFilters] = useState<Filters>(initialFilters);
   const [sortOrder, setSortOrder] = useState("relevance");
   const [allProducts, setAllProducts] = useState<MarketplaceItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  
 
-  // Fetch products on component mount
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
@@ -173,108 +275,43 @@ export default function LocalMarketplacePage() {
     loadProducts();
   }, []);
 
-  const categories = useMemo(() => {
-    return [...new Set(allProducts.map(p => p.category))];
-  }, [allProducts]);
+  const allCategories = useMemo(() => [...new Set(allProducts.map(p => p.category))], [allProducts]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let products = [...allProducts];
     if (searchTerm) {
       products = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }
-    if (selectedCategories.length > 0) {
-      products = products.filter(p => selectedCategories.includes(p.category));
+    if (filters.categories.length > 0) {
+      products = products.filter(p => filters.categories.includes(p.category));
     }
-    products = products.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
-    if (minRating > 0) {
-      products = products.filter(p => p.rating >= minRating);
+    products = products.filter(p => p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]);
+    if (filters.minRating > 0) {
+      products = products.filter(p => p.rating >= filters.minRating);
     }
-    if (sortOrder === "price-asc") {
-      products.sort((a, b) => a.price - b.price);
-    } else if (sortOrder === "price-desc") {
-      products.sort((a, b) => b.price - a.price);
-    } else if (sortOrder === "rating-desc") {
-      products.sort((a, b) => b.rating - a.rating);
-    }
+    if (sortOrder === "price-asc") products.sort((a, b) => a.price - b.price);
+    else if (sortOrder === "price-desc") products.sort((a, b) => b.price - a.price);
+    else if (sortOrder === "rating-desc") products.sort((a, b) => b.rating - a.rating);
     return products;
-  }, [allProducts, searchTerm, selectedCategories, priceRange, minRating, sortOrder]);
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories(prev =>
-      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
-    );
-  };
+  }, [allProducts, searchTerm, filters, sortOrder]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-gray-800 font-sans">
       <Navigation />
       
-      <header className="bg-slate-50 pt-24 pb-12 px-4 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          <span className="text-gray-800">Local</span>
-          <span style={{ color: '#F58B2E' }}> Marketplace</span>
-        </h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-          Explore authentic handicrafts and produce, sourced directly from the artisans and farmers of Jharkhand.
-        </p>
-        <div className="flex items-center justify-center gap-x-6 gap-y-2 flex-wrap mt-8 text-sm text-gray-500">
-          <div className="flex items-center gap-1.5"><Award className="w-4 h-4 text-orange-500" /><span>Authentic products</span></div>
-          <div className="flex items-center gap-1.5"><Heart className="w-4 h-4 text-orange-500" /><span>Support local artisans</span></div>
-          <div className="flex items-center gap-1.5"><Truck className="w-4 h-4 text-orange-500" /><span>Direct from source</span></div>
-        </div>
-        
-        {/* Cart Button */}
-        <div className="fixed bottom-6 right-6 z-50">
-          <Button
-            onClick={() => setIsCartOpen(true)}
-            className="rounded-full h-14 w-14 shadow-lg"
-            size="icon"
-          >
-            <ShoppingCart className="w-6 h-6" />
-            
-          </Button>
-        </div>
+      <header className="pt-16 pb-0 px-0">
+        <img src="/src/assets/lmk.jpg" alt="Local Marketplace Banner" className="w-full h-72 object-cover" />
       </header>
 
-      {/* MODIFIED MAIN SECTION */}
-      <main id="main" className="flex-1 w-full py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto py-10 px-4 bg-gradient-to-b from-[#FAF7F2] to-white">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
           <aside className="lg:col-span-1">
-            <div className="sticky top-24">
-              <h3 className="text-xl font-semibold mb-4 flex items-center"><Filter className="w-5 h-5 mr-2" />Filters</h3>
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-medium mb-3">Category</h4>
-                  <div className="space-y-2">
-                    {categories.map(category => (
-                      <div key={category} className="flex items-center space-x-2">
-                        <Checkbox id={category} onCheckedChange={() => handleCategoryChange(category)} checked={selectedCategories.includes(category)} />
-                        <Label htmlFor={category} className="font-normal cursor-pointer">{category}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-2">Price Range</h4>
-                  <Slider value={priceRange} onValueChange={(value) => setPriceRange(value as [number, number])} max={6000} step={100} />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>₹{priceRange[0]}</span>
-                    <span>₹{priceRange[1]}</span>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-3">Rating</h4>
-                  <div className="flex space-x-2">
-                    {[4, 3, 2, 1].map(rating => (
-                      <Button key={rating} variant={minRating === rating ? "default" : "outline"} size="sm" onClick={() => setMinRating(minRating === rating ? 0 : rating)}>
-                        {rating} <Star className="w-3 h-3 ml-1 fill-current" />+
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <FilterSidebar 
+              allCategories={allCategories}
+              currentFilters={filters}
+              onApplyFilters={setFilters}
+            />
           </aside>
 
           <div className="lg:col-span-3">
@@ -287,9 +324,7 @@ export default function LocalMarketplacePage() {
                 className="w-full sm:max-w-xs"
               />
               <Select value={sortOrder} onValueChange={setSortOrder}>
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
+                <SelectTrigger className="w-full sm:w-[180px]"><SelectValue placeholder="Sort by" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="relevance">Relevance</SelectItem>
                   <SelectItem value="price-asc">Price: Low to High</SelectItem>
@@ -300,9 +335,7 @@ export default function LocalMarketplacePage() {
             </div>
             
             {loading ? (
-              <div className="text-center py-20">
-                <p className="text-lg">Loading products...</p>
-              </div>
+              <div className="text-center py-20"><p className="text-lg">Loading products...</p></div>
             ) : filteredAndSortedProducts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredAndSortedProducts.map((item) => <ProductCard key={item.id} item={item} />)}
@@ -316,9 +349,6 @@ export default function LocalMarketplacePage() {
           </div>
         </div>
       </main>
-      
-      {/* Cart Component */}
-      
       
       <Footer />
     </div>
