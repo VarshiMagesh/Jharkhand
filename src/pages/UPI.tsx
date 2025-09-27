@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CheckCircle, XCircle, Mountain, TreePine, Waves, Sun, Star, Gem, ArrowLeft } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  Mountain,
+  TreePine,
+  Waves,
+  Sun,
+  Star,
+  Gem,
+  ArrowLeft,
+} from "lucide-react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer1";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -28,7 +40,7 @@ const MockUPIPayment: React.FC = () => {
     setShowFailure(false);
     setLastAction(result);
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setIsProcessing(false);
 
@@ -53,16 +65,15 @@ const MockUPIPayment: React.FC = () => {
   }, [status]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-900 via-orange-800 to-red-900 relative overflow-hidden">
-      {/* Animated tribal patterns */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 w-32 h-32 border-4 border-yellow-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-orange-500 transform rotate-45 animate-bounce"></div>
-        <div className="absolute bottom-20 left-20 w-24 h-24 border-4 border-red-400 transform rotate-12 animate-spin" style={{ animationDuration: "8s" }}></div>
-        <div className="absolute bottom-32 right-32 w-20 h-20 bg-yellow-500 rounded-full animate-ping"></div>
-      </div>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-900 via-orange-800 to-red-900 relative overflow-hidden">
+      /* Navbar */
+      <Navigation />
 
-      <div className="relative flex items-center justify-center min-h-screen p-4">
+      {/* Spacing */}
+      <div className="h-16" />
+
+      {/* Page Content */}
+      <div className="flex-1 relative flex items-center justify-center p-4">
         <div className="relative">
           <div className="absolute -inset-2 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-3xl blur opacity-40 animate-pulse"></div>
 
@@ -90,7 +101,9 @@ const MockUPIPayment: React.FC = () => {
               <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">
                 Jharkhand Tourism
               </h1>
-              <h2 className="text-lg font-semibold text-orange-100 mb-1">Secure Payment Gateway</h2>
+              <h2 className="text-lg font-semibold text-orange-100 mb-1">
+                Secure Payment Gateway
+              </h2>
               <p className="text-amber-200 text-sm flex items-center justify-center">
                 <TreePine className="w-4 h-4 mr-1" />
                 Experience Natural Beauty
@@ -107,7 +120,9 @@ const MockUPIPayment: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-white font-bold">Payment Details</p>
-                    <p className="text-green-200 text-sm">UPI ID: jharkhand@tourism</p>
+                    <p className="text-green-200 text-sm">
+                      UPI ID: jharkhand@tourism
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center text-yellow-400">
@@ -119,7 +134,9 @@ const MockUPIPayment: React.FC = () => {
               <div className="bg-gradient-to-r from-amber-600/30 to-orange-600/30 rounded-xl p-4 border-2 border-yellow-500/40">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-yellow-100 text-2xl font-bold">₹ {amount.toLocaleString()}</p>
+                    <p className="text-yellow-100 text-2xl font-bold">
+                      ₹ {amount.toLocaleString()}
+                    </p>
                     <p className="text-amber-200 text-sm">{description}</p>
                     {type && (
                       <p className="text-orange-200 text-xs mt-1">
@@ -129,28 +146,36 @@ const MockUPIPayment: React.FC = () => {
                     )}
                   </div>
                   <div className="text-right">
-                    <Sun className="w-8 h-8 text-yellow-400 animate-spin" style={{ animationDuration: "4s" }} />
+                    <Sun
+                      className="w-8 h-8 text-yellow-400 animate-spin"
+                      style={{ animationDuration: "4s" }}
+                    />
                     <p className="text-orange-200 text-xs mt-1">Secure</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Status Display (same as your original) */}
+            {/* Status Display */}
             {(status || isProcessing) && (
               <div className="mb-6">
                 {isProcessing && (
                   <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-2 border-blue-500/40 rounded-2xl p-6 text-center backdrop-blur-sm">
-                    <p className="text-white font-bold text-lg">Processing Payment...</p>
+                    <p className="text-white font-bold text-lg">
+                      Processing Payment...
+                    </p>
                   </div>
                 )}
 
                 {showSuccess && (
                   <div className="bg-gradient-to-r from-green-600/25 to-emerald-600/25 border-2 border-green-500/50 rounded-2xl p-6 text-center animate-fade-in backdrop-blur-sm">
                     <CheckCircle className="w-16 h-16 text-green-400 animate-bounce mx-auto mb-4" />
-                    <p className="text-white font-bold text-xl mb-2">Payment Successful!</p>
+                    <p className="text-white font-bold text-xl mb-2">
+                      Payment Successful!
+                    </p>
                     <p className="text-green-400 font-mono text-sm mt-2">
-                      TXN ID: JH-PAY-{Math.random().toString(36).substr(2, 9).toUpperCase()}
+                      TXN ID: JH-PAY-
+                      {Math.random().toString(36).substr(2, 9).toUpperCase()}
                     </p>
                   </div>
                 )}
@@ -188,6 +213,9 @@ const MockUPIPayment: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

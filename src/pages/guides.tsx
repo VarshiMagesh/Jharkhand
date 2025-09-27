@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,7 @@ const Guides = () => {
   });
 
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   // Fetch guides from Supabase
   useEffect(() => {
@@ -183,6 +185,31 @@ const Guides = () => {
     } finally {
       setBookingLoading(false);
     }
+  };
+
+  // UPI payment helper (added)
+  const handlePayViaUpi = () => {
+    if (!selectedGuide) {
+      toast({
+        title: "No guide selected",
+        description: "Select a guide and open the booking modal to calculate the amount.",
+        variant: "destructive",
+      });
+      return;
+    }
+    // Calculate the same estimated cost
+    let numberOfDays = 0;
+    if (formData.tour_duration === '8+') {
+      numberOfDays = 7;
+    } else {
+      numberOfDays = parseInt(formData.tour_duration.split('-')[0], 10);
+    }
+    const amount = selectedGuide.cost_per_day * (isNaN(numberOfDays) ? 1 : numberOfDays);
+
+    // Navigate to the same UPI route pattern used in LocalMarketplace
+    navigate(
+      `/upi?amount=${amount}&description=${encodeURIComponent('Guide Booking')}&type=guide&name=${encodeURIComponent(selectedGuide.name)}`
+    );
   };
 
   const totalCost = useMemo(() => {
@@ -437,22 +464,19 @@ const Guides = () => {
                     </p>
                   </div>
                 </div>
-                <div className="md:col-span-2">
-                  <Button 
-                    type="submit" 
-                    size="lg" 
-                    className="w-full hero-gradient text-white shadow-nature"
-                    disabled={bookingLoading}
+
+                {/* Payment via UPI (added) + existing Confirm Booking */}
+                <div className="md:col-span-2 space-y-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={handlePayViaUpi}
+                    disabled={!selectedGuide}
                   >
-                    {bookingLoading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Submitting...
-                      </>
-                    ) : (
-                      'Confirm Booking'
-                    )}
+                    Pay via UPI - ₹{totalCost}
                   </Button>
+
                 </div>
               </form>
             </>
@@ -473,7 +497,20 @@ const Guides = () => {
                   <p className="text-sm"><strong>Booking ID:</strong> {bookingDetails.bookingId?.slice(0, 8)}</p>
                   <p className="text-sm"><strong>Total Cost:</strong> ₹{bookingDetails.totalCost}</p>
                 </div>
-                <Button className="w-full mt-4" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
+
+                {/* Pay after booking (added) */}
+                <Button
+                  className="w-full mb-2 hero-gradient text-white"
+                  onClick={() =>
+                    navigate(
+                      `/upi?amount=${bookingDetails.totalCost}&description=${encodeURIComponent('Guide Booking')}&type=guide&name=${encodeURIComponent(bookingDetails.guideName)}`
+                    )
+                  }
+                >
+                  Pay Now via UPI - ₹{bookingDetails.totalCost}
+                </Button>
+
+                <Button className="w-full mt-2" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
               </div>
            )}
         </DialogContent>
@@ -485,4 +522,3 @@ const Guides = () => {
 };
 
 export default Guides;
-

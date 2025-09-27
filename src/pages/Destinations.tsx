@@ -1,8 +1,6 @@
-// src/pages/Destinations.tsx
-import Footer from "@/components/Footer";
-import { Link } from "react-router-dom"; // CORRECTED IMPORT
 import { useState, useMemo } from "react";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MapPin, Star, Clock, Users, Camera, TreePine, Icon } from "lucide-react";
+import { MapPin, Star, Clock, Users, Camera, TreePine } from "lucide-react";
+import { Link } from "react-router-dom";
+import DestinationVideo from "@/assets/destination-video.mp4";
 
 // Import your image assets
 
@@ -154,7 +154,6 @@ const allDestinations = [
     duration: "2-3 hours"
   }
 ];
-
 const Destinations = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -163,180 +162,108 @@ const Destinations = () => {
   const categories = ["All", ...new Set(allDestinations.map((dest) => dest.category))];
 
   const finalDestinations = useMemo(() => {
-    const filtered = allDestinations.filter((dest) => {
+    return allDestinations.filter((dest) => {
       const matchesSearch =
         dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         dest.location.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === "All" || dest.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-
-    const sorted = [...filtered];
-    switch (sortOrder) {
-      case "name-asc":
-        sorted.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "rating-desc":
-        sorted.sort((a, b) => b.rating - a.rating);
-        break;
-      case "location-asc":
-        sorted.sort((a, b) => a.location.localeCompare(b.location));
-        break;
-      default:
-        break;
-    }
-    return sorted;
-  }, [searchTerm, selectedCategory, sortOrder]);
+  }, [searchTerm, selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
+    <div className="relative min-h-screen">
+      {/* Top section with video */}
+      <section className="relative h-[600px]">
+        <video
+          src={DestinationVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/30"></div>
 
-      <section className="pt-24 pb-12 bg-gradient-to-b from-muted/30 to-background">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-              Explore <span className="text-accent">Destinations</span>
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Discover the most breathtaking places in Jharkhand, from majestic waterfalls to wildlife sanctuaries and serene hill stations.
-            </p>
+        <div className="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
+          <Navigation />
+
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            Explore <span className="text-yellow-400">Destinations</span>
+          </h1>
+          <p className="text-lg max-w-3xl text-white">
+            Discover the most breathtaking places in Jharkhand, from majestic waterfalls to wildlife sanctuaries and serene hill stations.
+          </p>
+
+          {/* Category Buttons */}
+          <div className="flex flex-wrap gap-2 justify-center mt-6">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </Button>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="container mx-auto px-4 lg:px-8 py-8">
-        <div className="flex flex-col sm:flex-row gap-4 mb-6 max-w-2xl mx-auto">
-          <Input
-            placeholder="Search by name or location..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1"
-          />
-          <Select value={sortOrder} onValueChange={setSortOrder}>
-            <SelectTrigger className="w-full sm:w-[200px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">Sort by: Default</SelectItem>
-              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-              <SelectItem value="rating-desc">Rating (High to Low)</SelectItem>
-              <SelectItem value="location-asc">Location (A-Z)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-wrap gap-2 justify-center">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </Button>
-          ))}
-        </div>
-      </section>
-
-      <section className="py-16 pt-8">
+      {/* Cream background for destination cards */}
+      <section className="bg-cream-100 py-12">
         <div className="container mx-auto px-4 lg:px-8">
-          {finalDestinations.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-              {finalDestinations.map((destination) => (
-                <Card
-                  key={destination.id}
-                  className="group overflow-hidden shadow-card hover:shadow-nature transition-smooth hover:scale-105"
-                >
-                  <div className="relative h-64 overflow-hidden">
-                    <img
-                      src={destination.image}
-                      alt={destination.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <div className="hero-gradient text-white px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1">
-                        <destination.icon className="w-4 h-4" />
-                        <span>{destination.category}</span>
-                      </div>
-                    </div>
-                    <div className="absolute top-4 right-4">
-                      <div className="bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm font-medium">{destination.rating}</span>
-                      </div>
-                    </div>
+          {/* Search & Filters */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6 max-w-2xl mx-auto">
+            <Input
+              placeholder="Search by name or location..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1"
+            />
+            <Select value={sortOrder} onValueChange={setSortOrder}>
+              <SelectTrigger className="w-full sm:w-[200px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="default">Default</SelectItem>
+                <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                <SelectItem value="rating-desc">Rating (High to Low)</SelectItem>
+                <SelectItem value="location-asc">Location (A-Z)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Destination Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            {finalDestinations.map((destination) => (
+              <Card key={destination.id} className="overflow-hidden shadow-lg hover:scale-105 transition-transform">
+                <div className="relative h-64 overflow-hidden">
+                  <img
+                    src={destination.image}
+                    alt={destination.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <CardContent>
+                  <h3 className="text-xl font-bold mb-1">{destination.name}</h3>
+                  <div className="flex items-center text-muted-foreground mb-2">
+                    <MapPin className="w-4 h-4 mr-1" /> {destination.location}
                   </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-smooth">
-                        {destination.name}
-                      </h3>
-                      <div className="flex items-center space-x-1 text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm">{destination.duration}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-1 text-muted-foreground mb-3">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm">{destination.location}</span>
-                    </div>
-                    <p className="text-muted-foreground text-sm mb-4">
-                      {destination.description}
-                    </p>
-                    <div className="mb-4">
-                      <h4 className="text-sm font-semibold text-foreground mb-2">Highlights:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {destination.highlights.slice(0, 3).map((highlight, index) => (
-                          <span
-                            key={index}
-                            className="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full"
-                          >
-                            {highlight}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="text-xs text-muted-foreground mb-4">
-                      <strong>Best Time:</strong> {destination.bestTime}
-                    </div>
-                    <div className="flex gap-2">
-                      {/* CORRECTED LINK WRAPPER */}
-                      <Link to={`/destinations/${destination.id}`} className="flex-1">
-                        <Button
-                          variant="outline"
-                          className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-smooth"
-                        >
-                          Learn More
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">No destinations found matching your criteria.</p>
-            </div>
-          )}
+                  <p className="text-sm text-muted-foreground">{destination.description}</p>
+                  <Link to={`/destinations/${destination.id}`}>
+                    <Button variant="outline" className="mt-4 w-full">
+                      Learn More
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Ready to Plan Your Adventure?
-          </h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Let our expert guides help you create the perfect itinerary for your Jharkhand journey.
-          </p>
-          <Button size="lg" className="hero-gradient text-white shadow-nature">
-            Start Planning Your Journey
-          </Button>
-        </div>
-      </section>
-              <Footer />
-
+      <Footer />
     </div>
   );
 };

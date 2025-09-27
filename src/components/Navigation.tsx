@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Menu, X, MapPin, Users, ShoppingBag, User, Landmark, Calendar as CalendarIcon } from "lucide-react";
-
+import logo from "@/assets/logo.jpg"; // Adjust the path as necessary
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -18,7 +18,6 @@ const Navigation = () => {
     { name: "Cultural Heritage", path: "/culture", icon: <Landmark className="w-4 h-4 inline mr-1" /> },
     { name: "Local Marketplace", path: "/local-marketplace", icon: <ShoppingBag className="w-4 h-4 inline mr-1" /> },
     { name: "Guides", path: "/guides", icon: <Users className="w-4 h-4 inline mr-1" /> },
-    { name: "Contact", path: "/contact" },
   ];
 
   return (
@@ -26,9 +25,9 @@ const Navigation = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 hero-gradient rounded-lg flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-lg">J</span>
-            </div>
+<div>
+  <img src={logo} alt="Logo" className="w-12 h-12 object-contain" />
+</div>
             <div className="flex flex-col">
               <span className="font-bold text-xl text-foreground leading-tight">Jharkhand Tourism</span>
               <span className="text-xs text-muted-foreground">Experience the Soul of India</span>
@@ -51,19 +50,7 @@ const Navigation = () => {
               </Button>
             </Link>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full p-0.5 hero-gradient">
-                  <div className="w-full h-full bg-background rounded-full flex items-center justify-center">
-                    <User className="h-5 w-5" strokeWidth={2.5} />
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+
           </div>
 
           <Button
