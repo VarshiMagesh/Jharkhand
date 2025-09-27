@@ -776,14 +776,7 @@ const ItineraryPlanner = () => {
                     This personalized itinerary is crafted based on your preferences. 
                     Our team will contact you within 24 hours to finalize bookings and arrangements.
                   </p>
-                  <div className="flex flex-wrap justify-center gap-4">
-                    <Button variant="secondary" className="text-primary">
-                      Download PDF Itinerary
-                    </Button>
-                    <Button variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                      Modify Preferences
-                    </Button>
-                  </div>
+                  
                 </CardContent>
               </Card>
             </div>

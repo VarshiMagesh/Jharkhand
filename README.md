@@ -1,73 +1,25 @@
-# Welcome to your Lovable project
+Problem Statement Title 	
+Development of a Smart Digital Platform to Promote Eco & Cultural Tourism in Jharkhand 
 
-## Project info
+Description 	
+Background
 
-**URL**: https://lovable.dev/projects/40d0d76b-9a0b-476c-aa40-df7a12429e43
+Jharkhand is blessed with natural beauty, tribal culture, historical landmarks, and eco-tourism hotspots like Netarhat, Patratu, Betla National Park, Hundru Falls, and Deoghar. However, despite its vast potential, the state's tourism industry remains underdeveloped due to a lack of digital infrastructure, limited promotional outreach, low tourist awareness, and unorganized travel and hospitality services.
 
-## How can I edit this code?
+Description
 
-There are several ways of editing your application.
+Tourists often find it difficult to access reliable information about destinations, local transportation, accommodations, cultural activities, and guides. Additionally, local artisans, tribal communities, and small-scale service providers who could benefit greatly from tourism remain largely excluded from the digital ecosystem. There is a strong need for a centralized digital platform that not only improves the tourist experience through authentic and accessible information but also connects and empowers local communities, making tourism in Jharkhand more inclusive, organized, and sustainable.
 
-**Use Lovable**
+Expected Solution
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/40d0d76b-9a0b-476c-aa40-df7a12429e43) and start prompting.
+Design and develop an AI-powered digital tourism platform (mobile app and/or website) for Jharkhand that offers:
+• AI-based personalized itinerary planning and multilingual chatbot assistance for tourists.
+• Blockchain-enabled secure transactions, guide verification, and digital certification for local service providers.
+• Interactive maps and AR/VR previews of major tourist and cultural sites.
+• Real-time transport and location info using geo-location.
+• Integrated local marketplace for tribal handicrafts, events, homestays, and ecotourism.
+• AI-driven feedback and sentiment analysis for continuous improvement.
+• Analytics dashboard for tourism officials to monitor trends and impact.
 
-Changes made via Lovable will be committed automatically to this repo.
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/40d0d76b-9a0b-476c-aa40-df7a12429e43) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+BY TEAM CTRL+ALT+DEFEAT ALL
