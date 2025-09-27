@@ -9,7 +9,7 @@ export const chatWithGemini = async (
   language: string = 'english'
 ) => {
   try {
-    const response = await fetch('https://csvzsqwsknusmztdtppb.functions.supabase.co/chat', {
+    const response = await fetch('https://csvzsqwsknusmztdtppb.supabase.co/functions/v1/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

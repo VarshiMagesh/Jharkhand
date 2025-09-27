@@ -744,11 +744,14 @@ const ItineraryPlanner = () => {
                           </div>
                           <div className="hero-gradient text-white rounded p-2 text-center">
                             <div className="text-xs opacity-90">Daily Budget</div>
-                            <div className="font-bold">
-                              {typeof day.budget === 'string' ? day.budget : 
-                               typeof day.budget === 'object' && day.budget?.total ? day.budget.total :
-                               '₹3,000 - ₹5,000'}
-                            </div>
+                            <div className="font-bold text-sm leading-snug">
+  {typeof day.budget === "string"
+    ? day.budget
+    : typeof day.budget === "object" && day.budget?.total
+    ? day.budget.total
+    : "₹3,000 - ₹5,000"}
+</div>
+
                           </div>
                         </div>
                       </div>
