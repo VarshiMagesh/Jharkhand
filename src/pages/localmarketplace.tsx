@@ -16,6 +16,9 @@ import { ShoppingBag, Star, MapPin, Truck, Heart, Award, Filter, ShoppingCart, B
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+// --- IMPORT YOUR IMAGE ---
+import marketplaceBanner from "@/assets/lmk.jpg"; // Use @ which is an alias for src
+
 // --- INTERFACES & TYPES ---
 interface MarketplaceItem {
   id: string;
@@ -300,7 +303,7 @@ export default function LocalMarketplacePage() {
       <Navigation />
       
       <header className="pt-16 pb-0 px-0">
-        <img src="/src/assets/lmk.jpg" alt="Local Marketplace Banner" className="w-full h-72 object-cover" />
+        <img src={marketplaceBanner} alt="Local Marketplace Banner" className="w-full h-72 object-cover" />
       </header>
 
       <main className="flex-1 w-full max-w-7xl mx-auto py-10 px-4 bg-gradient-to-b from-[#FAF7F2] to-white">
