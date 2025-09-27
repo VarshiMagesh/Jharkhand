@@ -14,6 +14,9 @@ import { useToast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
+// --- IMPORT YOUR IMAGE ---
+import guidesBanner from "@/assets/vfg.jpg"; // Use @ which is an alias for src
+
 interface Guide {
   id: string;
   name: string;
@@ -221,7 +224,7 @@ const Guides = () => {
       numberOfDays = parseInt(formData.tour_duration.split('-')[0], 10);
     }
     const cost = selectedGuide.cost_per_day * numberOfDays;
-    return cost.toFixed(2);
+    return isNaN(cost) ? '0.00' : cost.toFixed(2);
   }, [selectedGuide, formData.tour_duration]);
 
   const filteredGuides = useMemo(() => {
@@ -248,19 +251,8 @@ const Guides = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <header className="relative pt-28 pb-16 bg-gradient-to-b from-slate-50 to-background overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-            <div className="absolute -top-24 -right-24 w-72 h-72 bg-accent/10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-green-500/10 rounded-full blur-3xl"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Meet Our <span className="text-accent">Verified Guides</span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Explore Jharkhand with our certified, experienced, and passionate local guides. Find the perfect expert for your adventure.
-          </p>
-        </div>
+      <header className="pt-16 pb-0 px-0">
+        <img src={guidesBanner} alt="Verified Guides Banner" className="w-full object-cover" />
       </header>
 
       <main className="container mx-auto px-4 py-16">
@@ -487,31 +479,31 @@ const Guides = () => {
       <Dialog open={isConfirmationModalOpen} onOpenChange={setConfirmationModalOpen}>
         <DialogContent className="bg-background sm:max-w-md">
            {bookingDetails && (
-              <div className="text-center p-6">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-foreground mb-2">Booking Request Submitted!</h2>
-                <p className="text-muted-foreground mb-4">
-                  {bookingDetails.guideName} will contact you within 2 hours to confirm availability and details.
-                </p>
-                <div className="bg-muted p-4 rounded-lg mb-4">
-                  <p className="text-sm"><strong>Booking ID:</strong> {bookingDetails.bookingId?.slice(0, 8)}</p>
-                  <p className="text-sm"><strong>Total Cost:</strong> ₹{bookingDetails.totalCost}</p>
-                </div>
+             <div className="text-center p-6">
+               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+               <h2 className="text-2xl font-bold text-foreground mb-2">Booking Request Submitted!</h2>
+               <p className="text-muted-foreground mb-4">
+                 {bookingDetails.guideName} will contact you within 2 hours to confirm availability and details.
+               </p>
+               <div className="bg-muted p-4 rounded-lg mb-4">
+                 <p className="text-sm"><strong>Booking ID:</strong> {bookingDetails.bookingId?.slice(0, 8)}</p>
+                 <p className="text-sm"><strong>Total Cost:</strong> ₹{bookingDetails.totalCost}</p>
+               </div>
 
-                {/* Pay after booking (added) */}
-                <Button
-                  className="w-full mb-2 hero-gradient text-white"
-                  onClick={() =>
-                    navigate(
-                      `/upi?amount=${bookingDetails.totalCost}&description=${encodeURIComponent('Guide Booking')}&type=guide&name=${encodeURIComponent(bookingDetails.guideName)}`
-                    )
-                  }
-                >
-                  Pay Now via UPI - ₹{bookingDetails.totalCost}
-                </Button>
+               {/* Pay after booking (added) */}
+               <Button
+                 className="w-full mb-2 hero-gradient text-white"
+                 onClick={() =>
+                   navigate(
+                     `/upi?amount=${bookingDetails.totalCost}&description=${encodeURIComponent('Guide Booking')}&type=guide&name=${encodeURIComponent(bookingDetails.guideName)}`
+                   )
+                 }
+               >
+                 Pay Now via UPI - ₹{bookingDetails.totalCost}
+               </Button>
 
-                <Button className="w-full mt-2" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
-              </div>
+               <Button className="w-full mt-2" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
+             </div>
            )}
         </DialogContent>
       </Dialog>
