@@ -37,7 +37,7 @@ interface Destination {
 }
 
 const destinations: Destination[] = [
-  {
+{
     id: 1,
     name: "Jonha Falls",
     location: "Ranchi",
@@ -50,8 +50,9 @@ const destinations: Destination[] = [
     bestTime: "October to February",
     entryFee: "Free (Parking fees may apply)",
     gallery: ["/jonhafalls.jpg"],
-    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3663.267898604803!2d85.61020549999999!3d23.3423069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f45588d35ee645%3A0x3293be91dcc1eb17!2sJonha%20Falls!5e0!3m2!1sen!2sin!4v1758380102602!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/a2525130c1ba4d8fb87030021919b1d1?utm_campaign=embed&utm_source=other&heading=0&pitch=0&field-of-view=75&size=medium"
+    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!4v160",
+    // --- THIS IS THE UPDATED LINE ---
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758970718884!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJRGQ3TUtDWkE.!2m2!1d23.34230689656271!2d85.61020548630665!3f352.6859283060662!4f-13.667763177232288!5f0.7820865974627469"
   },
   {
     id: 2,
@@ -67,7 +68,7 @@ const destinations: Destination[] = [
     entryFee: "Free",
     gallery: ["/netarhat.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58549.09594597022!2d84.1892121886978!3d23.485034946567637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398b08073b9e73e9%3A0x27447d0d1c7e558f!2sNetarhat%2C%20Jharkhand%20835218!5e0!3m2!1sen!2sin!4v1758380218985!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/7ee3601bdcfb4457ad21873277c5db22?utm_campaign=embed&utm_source=other&heading=-61&pitch=-5.5&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758970940439!6m8!1m7!1sol88HTIJ95LQu19bJoLnRw!2m2!1d23.48314215373052!2d84.26101454743167!3f182.86465231516922!4f-2.89713570297468!5f0.7820865974627469"
   },
   {
     id: 3,
@@ -83,7 +84,7 @@ const destinations: Destination[] = [
     entryFee: "Varies for entry, vehicle, and guide.",
     gallery: ["/betlanationalpark.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29184.506529685255!2d84.15838299357637!3d23.887373389666564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398b8379e9a69063%3A0x6c76abbdcc05d0ce!2sBetla%2C%20Jharkhand!5e0!3m2!1sen!2sin!4v1758380307117!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/f9be11f6745e45c6b07159b31d94aba0?utm_campaign=embed&utm_source=other&heading=-200.76&pitch=22.51&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971076681!6m8!1m7!1sXoFGyorpeAY5QSmj0NyBHw!2m2!1d23.8869109609042!2d84.19123515151492!3f131.00440653564394!4f-30.416949771677338!5f0.7820865974627469"
   },
   {
     id: 4,
@@ -99,7 +100,7 @@ const destinations: Destination[] = [
     entryFee: "Nominal fee for entry and parking.",
     gallery: ["/dassamfalls.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3668.7297215278627!2d85.46411212433888!3d23.14355251180454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5056e67b9e4a3%3A0x25570e4d2a5836ee!2sDassam%20Falls!5e0!3m2!1sen!2sin!4v1758380383272!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/2702a395280a43d6a38fd74f77c4b37e?utm_campaign=embed&utm_source=other&heading=-463.36&pitch=-12.75&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971169650!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ2xxNUR5YlE.!2m2!1d23.14625149397734!2d85.46722033848455!3f291.7980619872639!4f1.2934249511172453!5f0.7820865974627469"
   },
   {
     id: 5,
@@ -115,7 +116,7 @@ const destinations: Destination[] = [
     entryFee: "Free",
     gallery: ["/jagannathtemple.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29548.022337508693!2d85.60574497175944!3d22.220994218140223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1e353c8e07436d%3A0xb9d4fc164a74ce34!2sJagannathpur%2C%20Jharkhand%20833203!5e0!3m2!1sen!2sin!4v1758380438228!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/55436d1cbf6149ca9d95a831a8c64bee?utm_campaign=embed&utm_source=other&heading=-343.21&pitch=10.13&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971245055!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ2xpcWF1NmdF!2m2!1d23.31697541161424!2d85.28163227986022!3f261.29012534121665!4f12.997438581560544!5f0.7820865974627469"
   },
   {
     id: 6,
@@ -131,7 +132,7 @@ const destinations: Destination[] = [
     entryFee: "Free",
     gallery: ["/sitafalls.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2794.2250860513846!2d85.64204006005222!3d23.341799948572636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f455454f574ffb%3A0x434a065098e91bf0!2sSita%20Falls!5e0!3m2!1sen!2sin!4v1758380518596!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/c785e817c04a45d1b317fff3c0b24072?utm_campaign=embed&utm_source=other&heading=-227.14&pitch=-8.29&field-of-view=74&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971332486!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ2VfOUMwYUE.!2m2!1d23.34174480198946!2d85.64409830704238!3f252.89798!4f0!5f0.7820865974627469"
   },
   {
     id: 7,
@@ -147,7 +148,7 @@ const destinations: Destination[] = [
     entryFee: "Nominal fee for adults, children, and cameras.",
     gallery: ["/birsazoo.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.924580760875!2d85.45262807434946!3d23.463184799743978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4fb201192ee93%3A0x41461501d203da8e!2sBhagwan%20Birsa%20Biological%20Park!5e0!3m2!1sen!2sin!4v1758380580127!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/4c9c78e958bd4e9ba3a98ca2743d39f5?utm_campaign=embed&utm_source=other&heading=-121.46&pitch=-3.49&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971446511!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ1J0TVBNRVE.!2m2!1d23.46317992172474!2d85.45520296737948!3f174.00643826997637!4f3.0695322551038515!5f0.9507003625786181"
   },
   {
     id: 8,
@@ -163,7 +164,7 @@ const destinations: Destination[] = [
     entryFee: "Free",
     gallery: ["/tagorehill.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3661.6312243658253!2d85.3354987743474!3d23.401554602081152!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4e1496994ac09%3A0xb41a61fed030697a!2sTagore%20Hill!5e0!3m2!1sen!2sin!4v1758380694645!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/0ab230fe8f4e48dfb3f9d9c9862ae986?utm_campaign=embed&utm_source=other&heading=-325.26&pitch=16.56&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971490746!6m8!1m7!1sCAoSHENJQUJJaEQzZ09LT211VUdjYTJwNFNQRmRMTW0.!2m2!1d23.40154973323982!2d85.33807369269125!3f340.17549257481835!4f-7.92674886268955!5f0.7820865974627469"
   },
   {
     id: 9,
@@ -179,7 +180,7 @@ const destinations: Destination[] = [
     entryFee: "Nominal entry fee.",
     gallery: ["/nakshatravan.jpg"],
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3662.193150929567!2d85.31820747434672!3d23.381228802850742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f4e118fbedf5ed%3A0x5d066ca940714a51!2sNakshatra%20Van!5e0!3m2!1sen!2sin!4v1758380744931!5m2!1sen!2sin0",
-    panoramaEmbedUrl: "https://momento360.com/e/u/4f62b449086a40b7a44c424bdf2ee2b0?utm_campaign=embed&utm_source=other&heading=-351.05&pitch=6.7&field-of-view=75&size=medium"
+    panoramaEmbedUrl: "https://www.google.com/maps/embed?pb=!4v1758971638749!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ2swWld6bFFF!2m2!1d23.3812239154942!2d85.32078242291553!3f355.00646033742566!4f16.132069919739706!5f0.7820865974627469"
   }
 ];
 
