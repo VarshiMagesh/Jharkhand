@@ -158,7 +158,7 @@ const Chatbot = () => {
   {isOpen ? (
     <X className="h-6 w-6 text-white" />
   ) : (
-    <MessageCircle className="h-6 w-6 text-white" />
+    <Bot className="h-10 w-10 text-white animate-bot-glow" />
   )}
 </Button>
 
