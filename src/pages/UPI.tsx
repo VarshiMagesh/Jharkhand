@@ -14,18 +14,34 @@ import {
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer1";
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
 const MockUPIPayment: React.FC = () => {
-  const query = useQuery();
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const amount = Number(query.get("amount")) || 0;
-  const description = query.get("description") || "Payment";
-  const type = query.get("type") as "guide" | "product" | null;
-  const name = query.get("name") || "";
+  // Get totalAmount from navigation state
+  const totalAmount = location.state?.totalAmount || 0;
+
+  // Fallback if totalAmount is 0
+  if (totalAmount === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-amber-900 via-orange-800 to-red-900 text-white">
+        <Navigation />
+        <div className="text-center p-6">
+          <p className="text-2xl font-bold mb-4">
+            No payment amount found
+          </p>
+          <p className="mb-6">Please go back and add items to your cart.</p>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold"
+          >
+            Go Back
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const [status, setStatus] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -66,19 +82,15 @@ const MockUPIPayment: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-900 via-orange-800 to-red-900 relative overflow-hidden">
-      /* Navbar */
       <Navigation />
 
-      {/* Spacing */}
       <div className="h-16" />
 
-      {/* Page Content */}
       <div className="flex-1 relative flex items-center justify-center p-4">
         <div className="relative">
           <div className="absolute -inset-2 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-3xl blur opacity-40 animate-pulse"></div>
 
           <div className="relative bg-gradient-to-br from-amber-50/20 to-orange-100/20 backdrop-blur-xl border-2 border-yellow-500/30 rounded-3xl p-8 w-96 shadow-2xl">
-            {/* Back button */}
             <button
               onClick={() => navigate(-1)}
               className="absolute top-4 left-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
@@ -86,7 +98,6 @@ const MockUPIPayment: React.FC = () => {
               <ArrowLeft className="w-5 h-5 text-orange-200" />
             </button>
 
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mb-6">
                 <div className="relative">
@@ -111,7 +122,6 @@ const MockUPIPayment: React.FC = () => {
               </p>
             </div>
 
-            {/* Payment details */}
             <div className="bg-gradient-to-br from-green-800/30 to-emerald-700/30 border-2 border-green-500/40 rounded-2xl p-6 mb-6 backdrop-blur-sm">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -135,15 +145,9 @@ const MockUPIPayment: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-yellow-100 text-2xl font-bold">
-                      ₹ {amount.toLocaleString()}
+                      ₹ {totalAmount.toLocaleString()}
                     </p>
-                    <p className="text-amber-200 text-sm">{description}</p>
-                    {type && (
-                      <p className="text-orange-200 text-xs mt-1">
-                        {type === "guide" ? "Guide: " : "Product: "}
-                        {name}
-                      </p>
-                    )}
+                    <p className="text-amber-200 text-sm">Product Purchase</p>
                   </div>
                   <div className="text-right">
                     <Sun
@@ -156,7 +160,6 @@ const MockUPIPayment: React.FC = () => {
               </div>
             </div>
 
-            {/* Status Display */}
             {(status || isProcessing) && (
               <div className="mb-6">
                 {isProcessing && (
@@ -166,7 +169,6 @@ const MockUPIPayment: React.FC = () => {
                     </p>
                   </div>
                 )}
-
                 {showSuccess && (
                   <div className="bg-gradient-to-r from-green-600/25 to-emerald-600/25 border-2 border-green-500/50 rounded-2xl p-6 text-center animate-fade-in backdrop-blur-sm">
                     <CheckCircle className="w-16 h-16 text-green-400 animate-bounce mx-auto mb-4" />
@@ -179,7 +181,6 @@ const MockUPIPayment: React.FC = () => {
                     </p>
                   </div>
                 )}
-
                 {showFailure && (
                   <div className="bg-gradient-to-r from-red-600/25 to-pink-600/25 border-2 border-red-500/50 rounded-2xl p-6 text-center animate-fade-in backdrop-blur-sm">
                     <XCircle className="w-16 h-16 text-red-400 animate-pulse mx-auto mb-4" />
@@ -189,7 +190,6 @@ const MockUPIPayment: React.FC = () => {
               </div>
             )}
 
-            {/* Action Buttons */}
             {!isProcessing && (
               <div className="space-y-4">
                 {lastAction !== "success" && (
@@ -214,7 +214,6 @@ const MockUPIPayment: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
