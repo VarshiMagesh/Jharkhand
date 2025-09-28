@@ -83,7 +83,8 @@ const Guides = () => {
         .select('*')
         .eq('service_type', 'guide')
         .eq('is_active', true)
-        .eq('status', 'approved');
+        .eq('status', 'approved')
+        .order('total_reviews', { ascending: false });
 
       if (error) throw error;
       setGuides(data || []);
@@ -519,3 +520,4 @@ const Guides = () => {
 };
 
 export default Guides;
+
