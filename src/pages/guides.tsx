@@ -15,7 +15,7 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
 // --- IMPORT YOUR IMAGE ---
-import guidesBanner from "@/assets/vfg.jpg"; // Use @ which is an alias for src
+import guidesBanner from "@/assets/vfg.png"; // Use @ which is an alias for src
 
 interface Guide {
   id: string;
@@ -251,8 +251,13 @@ const Guides = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <header className="pt-16 pb-0 px-0">
-        <img src={guidesBanner} alt="Verified Guides Banner" className="w-full object-cover" />
+      <header className="pt-0 pb-0 px-0">
+        <img
+          src={guidesBanner}
+          alt="Verified Guides Banner"
+          className="w-full object-cover"
+          style={{ height: "520px" }}
+        />
       </header>
 
       <main className="container mx-auto px-4 py-16">

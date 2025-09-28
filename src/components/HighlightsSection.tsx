@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Swiper, SwiperSlide } from "swiper/react";
-// 1. Import Autoplay
-import { Navigation, Autoplay } from "swiper/modules";
+import { Autoplay } from "swiper/modules"; // Removed Navigation
 
-// Import Swiper styles
 import "swiper/css";
-import "swiper/css/navigation";
+// Removed navigation css import
 
-// Import images from assets
 import waterfallsImg from "@/assets/wtf.jpg";
 import tribalImg from "@/assets/th.jpg";
 import wildlifeImg from "@/assets/ws.jpg";
@@ -78,9 +75,7 @@ const HighlightsSection = () => {
         </div>
 
         <Swiper
-          // 2. Add Autoplay to the modules
-          modules={[Navigation, Autoplay]}
-          navigation
+          modules={[Autoplay]} // Removed Navigation
           spaceBetween={30}
           slidesPerView={1}
           breakpoints={{
@@ -88,7 +83,6 @@ const HighlightsSection = () => {
             1024: { slidesPerView: 3 },
           }}
           loop={true}
-          // 3. Add the autoplay configuration
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,

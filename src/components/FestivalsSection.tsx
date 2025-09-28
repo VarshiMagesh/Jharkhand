@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 
-// Import Swiper styles (already in your index.css but good practice here)
+// Import Swiper styles
 import "swiper/css";
-import "swiper/css/navigation";
 
 // Import images from assets
 import chhauImg from "@/assets/dance-chhau.jpg";
@@ -55,8 +54,8 @@ const FestivalsSection = () => {
         </div>
 
         <Swiper
-          modules={[Navigation]}
-          navigation
+          modules={[Autoplay]}
+          autoplay={{ delay: 2500, disableOnInteraction: false }}
           spaceBetween={30}
           slidesPerView={1}
           breakpoints={{

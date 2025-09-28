@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { PlayCircle, X } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/navigation";
 
 import video1 from "@/assets/video-1.mp4";
 import video2 from "@/assets/video-2.mp4";
@@ -32,7 +27,6 @@ const videoData = [
 ];
 
 const VideoGrid = () => {
-  // This is the corrected line
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   return (
@@ -45,40 +39,26 @@ const VideoGrid = () => {
             </h2>
           </div>
 
-          <Swiper
-            modules={[Navigation]}
-            navigation
-            spaceBetween={16}
-            loop={true}
-            slidesPerView={2}
-            breakpoints={{
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 5 },
-            }}
-            className="pb-12"
-          >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {videoData.map((video, index) => (
-              <SwiperSlide key={index}>
-                <DialogTrigger asChild onClick={() => setSelectedVideo(video.videoSrc)}>
-                  <div className="group relative block aspect-[9/16] overflow-hidden rounded-xl shadow-lg cursor-pointer">
-                    <video
-                      src={video.videoSrc}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-0 left-0 p-4 text-white">
-                      <PlayCircle className="w-8 h-8 opacity-80" />
-                    </div>
+              <DialogTrigger asChild key={index} onClick={() => setSelectedVideo(video.videoSrc)}>
+                <div className="group relative block aspect-[9/16] overflow-hidden rounded-xl shadow-lg cursor-pointer">
+                  <video
+                    src={video.videoSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-4 text-white">
+                    <PlayCircle className="w-8 h-8 opacity-80" />
                   </div>
-                </DialogTrigger>
-              </SwiperSlide>
+                </div>
+              </DialogTrigger>
             ))}
-          </Swiper>
+          </div>
         </div>
       </section>
 
