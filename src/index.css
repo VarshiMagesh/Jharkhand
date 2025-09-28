@@ -1,3 +1,7 @@
+/* Swiper styles */
+@import "swiper/css";
+@import "swiper/css/navigation";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -59,19 +63,12 @@ All colors MUST be HSL.
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -103,6 +100,7 @@ All colors MUST be HSL.
     --border: 136 15% 20%;
     --input: 136 15% 20%;
     --ring: 142 60% 50%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -152,4 +150,71 @@ All colors MUST be HSL.
   .transition-smooth {
     transition: var(--transition-smooth);
   }
+}
+
+/* ============================= */
+/* Swiper Navigation Custom Style */
+/* ============================= */
+.swiper-button-next,
+.swiper-button-prev {
+  color: white !important;
+  width: 45px;
+  height: 45px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: black !important;
+  transform: scale(1.1);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Custom cards with semi-circle top image */
+
+.carousel-card {
+  width: 370px;
+  min-height: 430px;
+  overflow: hidden;
+  margin: auto;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card);
+  border: none; /* Ensures no card border */
+}
+
+.carousel-card-image {
+  height: 210px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 120px;
+  border-top-right-radius: 120px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 8px 22px -8px rgba(50,60,60,0.10);
+}
+
+.carousel-card-content {
+  width: 100%;
+  background: hsl(var(--nature-beige));
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  flex-grow: 1;
+  padding-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

@@ -1,62 +1,92 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+
+// Import Swiper styles (already in your index.css but good practice here)
+import "swiper/css";
+import "swiper/css/navigation";
 
 // Import images from assets
 import chhauImg from "@/assets/dance-chhau.jpg";
 import sohraiImg from "@/assets/festival-sohrai.jpg";
 import paikaImg from "@/assets/dance-paika.jpg";
+import karmaImg from "@/assets/festival-karma.jpg";
 
 const FestivalsSection = () => {
   const festivals = [
     {
       name: "Chhau Dance",
-      description: "Chhau is a semi-classical Indian dance with martial and folk traditions.",
-      image: chhauImg
+      description: "A semi-classical Indian dance with martial and folk traditions.",
+      path: "/culture",
+      image: chhauImg,
+      button: "LEARN MORE",
     },
     {
-      name: "Sohrai Songs",
-      description: "These folk songs are an integral part of the Sohrai harvest festival.",
-      image: sohraiImg
+      name: "Sohrai Festival",
+      description: "A major harvest festival where walls are decorated with intricate murals.",
+      path: "/culture",
+      image: sohraiImg,
+      button: "LEARN MORE",
     },
     {
       name: "Paika Dance",
-      description: "Paika Dance is a martial folk dance that re-enacts ancient battles.",
-      image: paikaImg
-    }
+      description: "A powerful martial folk dance that re-enacts ancient battles.",
+      path: "/culture",
+      image: paikaImg,
+      button: "LEARN MORE",
+    },
+    {
+      name: "Karma Festival",
+      description: "A celebration of nature, with folk songs and dances.",
+      path: "/culture",
+      image: karmaImg,
+      button: "LEARN MORE",
+    },
   ];
 
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Festivals & Culture
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <Swiper
+          modules={[Navigation]}
+          navigation
+          spaceBetween={30}
+          slidesPerView={1}
+          breakpoints={{
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          loop={true}
+          className="pb-12"
+        >
           {festivals.map((festival, index) => (
-            <Card
-              key={index}
-              className="group hover:shadow-nature transition-all duration-300 hover:-translate-y-2 cursor-pointer h-full"
-              style={{
-                backgroundImage: `url(${festival.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              {/* Overlay for readability */}
-              <div className="bg-black/40 h-full w-full rounded-lg flex flex-col items-center justify-center p-6 text-center transition-all duration-300 group-hover:bg-black/20">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  {festival.name}
-                </h3>
-                <p className="text-white/80 leading-relaxed">
-                  {festival.description}
-                </p>
-              </div>
-            </Card>
+            <SwiperSlide key={index}>
+              <Card className="carousel-card shadow-xl hover:shadow-2xl transition-all duration-300">
+                <div
+                  className="carousel-card-image"
+                  style={{ backgroundImage: `url(${festival.image})` }}
+                />
+                <div className="carousel-card-content text-center flex flex-col justify-center items-center px-6 py-6">
+                  <h3 className="text-2xl font-semibold mb-3 text-foreground">{festival.name}</h3>
+                  <p className="mb-4 text-muted-foreground">{festival.description}</p>
+                  <Link
+                    to={festival.path}
+                    className="inline-block bg-primary text-primary-foreground font-medium px-5 py-2 rounded-full hover:bg-primary/80 transition"
+                  >
+                    {festival.button}
+                  </Link>
+                </div>
+              </Card>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
     </section>
   );

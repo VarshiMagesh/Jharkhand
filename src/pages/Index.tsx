@@ -1,34 +1,31 @@
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import HighlightsSection from "@/components/HighlightsSection";
-import DestinationsGrid from "@/components/DestinationsGrid";
 import FestivalsSection from "@/components/FestivalsSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import Footer from "@/components/Footer1";
 import WeeklyWeather from "@/components/WeeklyWeather";
+import VideoGrid from "@/components/VideoGrid";
+import Footer from "@/components/Footer"; // 1. Changed this from Footer1 to Footer
 
-// Import the background image
 import heroImage from "@/assets/hero-jharkhand.jpg";
 
 const Index = () => {
   return (
-    // This div is now responsible for the background
-    <div 
-      className="min-h-screen bg-cover bg-fixed bg-center"
-      style={{ backgroundImage: `url(${heroImage})` }}
-    >
-      <Navigation />
-      {/* We no longer need the top padding on the main element */}
-      <main>
-        <HeroSection />
-        <HighlightsSection />
-        <DestinationsGrid />
-        <FestivalsSection />
-        <WeeklyWeather />
-        <TestimonialsSection />
-        <Footer />
-      </main>
-    </div>
+    <>
+      <div 
+        className="bg-cover bg-fixed bg-center"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
+        <Navigation />
+        <main>
+          <HeroSection />
+          <HighlightsSection />
+          <FestivalsSection />
+          <WeeklyWeather />
+          <VideoGrid />
+        </main>
+      </div>
+      <Footer /> {/* 2. This will now render your new, stylish footer */}
+    </>
   );
 };
 
