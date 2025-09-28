@@ -21,7 +21,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="py-2 bg-gradient-to-br from-green-800 via-emerald-700 to-amber-700 relative overflow-hidden">
+    <footer className="py-10 bg-gradient-to-br from-green-800 via-emerald-700 to-amber-700 relative overflow-hidden">
       {/* Background Pattern for Jharkhand Theme */}
       <div className="absolute inset-0 opacity-10">
         {/* Forest/Mountain silhouettes */}
@@ -114,7 +114,7 @@ const Footer = () => {
             <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
               <span className="text-amber-300">🌿</span>
               <span className="text-sm font-medium">Proudly Showcasing Jharkhand's Natural Heritage</span>
-              <span className="text-amber-300">🏔️</span>
+              <span className="text-amber-300">🏔</span>
             </div>
           </div>
         </div>

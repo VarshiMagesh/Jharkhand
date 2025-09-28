@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +15,7 @@ import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import DestinationVideo from "@/assets/destination-video.mp4";
 
-// Component-specific styles are included in the <style> tag below
+// Component-specific styles for the 3D carousel
 const CarouselStyles = () => (
   <style>{`
     .carousel-container {
@@ -103,9 +103,9 @@ const allDestinations = [
   },
   {
     id: 7,
-    name: "Bhagwan Birsa Biological Park",
+    name: "Birsa Biological Park",
     location: "Ranchi",
-    category: "Zoo / Biological Park",
+    category: "Zoo",
     image: "/birsazoo.jpg",
     description: "A sprawling zoo and botanical garden with a wide variety of fauna.",
     rating: 4.5,
@@ -114,16 +114,16 @@ const allDestinations = [
     id: 8,
     name: "Tagore Hill",
     location: "Ranchi",
-    category: "Hill / Landmark",
+    category: "Trekking",
     image: "/tagorehill.jpg",
-    description: "A historic hill associated with the Tagore family, offering panoramic views.",
+    description: "A historic hill offering panoramic views and a popular trekking spot.",
     rating: 4.2,
   },
   {
     id: 9,
     name: "Nakshatra Van",
     location: "Ranchi",
-    category: "Park / Garden",
+    category: "Park",
     image: "/nakshatravan.jpg",
     description: "A unique park where trees are planted according to zodiac signs.",
     rating: 4.3,
@@ -136,7 +136,7 @@ const Destinations = () => {
   const [sortOrder, setSortOrder] = useState("default");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const categories = ["All", ...new Set(allDestinations.map((dest) => dest.category))];
+  const categories = ["All", "Waterfall", "Trekking", ...new Set(allDestinations.map((dest) => dest.category).filter(c => c !== "Waterfall" && c !== "Trekking"))];
 
   const finalDestinations = useMemo(() => {
     let filtered = allDestinations.filter((dest) => {
@@ -159,25 +159,23 @@ const Destinations = () => {
     }
   }, [searchTerm, selectedCategory, sortOrder]);
 
-  // Reset active index if the list of destinations changes
   useEffect(() => {
     setActiveIndex(0);
   }, [finalDestinations]);
   
-  // Auto-scrolling logic
   useEffect(() => {
+    if (finalDestinations.length <= 1) return;
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % finalDestinations.length);
-    }, 3000); // Change slide every 3 seconds
+    }, 3000);
 
-    return () => clearInterval(interval); // Cleanup on component unmount
+    return () => clearInterval(interval);
   }, [finalDestinations.length]);
 
   const getCardStyle = (index: number) => {
     const offset = index - activeIndex;
     const total = finalDestinations.length;
     
-    // Normalize offset to handle wrapping around the carousel
     let normalizedOffset = offset;
     if (offset > total / 2) {
       normalizedOffset = offset - total;
@@ -185,10 +183,9 @@ const Destinations = () => {
       normalizedOffset = offset + total;
     }
 
-    const isVisible = Math.abs(normalizedOffset) <= 2; // Show current, 2 left, 2 right
-
-    const translateX = normalizedOffset * 150; // Horizontal spacing
-    const rotateY = normalizedOffset * -25; // 3D rotation angle
+    const isVisible = Math.abs(normalizedOffset) <= 2;
+    const translateX = normalizedOffset * 150;
+    const rotateY = normalizedOffset * -25;
     const scale = 1 - Math.abs(normalizedOffset) * 0.2;
     const zIndex = 100 - Math.abs(normalizedOffset);
     const opacity = isVisible ? 1 : 0;
@@ -206,21 +203,22 @@ const Destinations = () => {
       <div className="relative min-h-screen">
         <section className="relative h-[600px]">
           <video src={DestinationVideo} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/30"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
           <div className="relative z-10 flex flex-col justify-center items-center h-full text-center px-4">
             <Navigation />
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               Explore <span className="text-yellow-400">Destinations</span>
             </h1>
-            <p className="text-lg max-w-3xl text-white">
-              Discover the most breathtaking places in Jharkhand, from majestic waterfalls to wildlife sanctuaries and serene hill stations.
+            <p className="text-lg max-w-3xl text-white mb-8">
+              Discover breathtaking places in Jharkhand, from majestic waterfalls to thrilling trekking spots.
             </p>
           </div>
         </section>
 
-        <section className="bg-cream-100 py-12 relative overflow-hidden">
+        <section className="bg-cream-100 py-16 relative overflow-hidden">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="flex flex-col sm:flex-row gap-4 mb-12 max-w-2xl mx-auto">
+            {/* --- Search and Sort Filters --- */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-8 max-w-2xl mx-auto">
               <Input
                 placeholder="Search by name or location..."
                 value={searchTerm}
@@ -238,35 +236,53 @@ const Destinations = () => {
               </Select>
             </div>
             
-            {/* 3D Auto-scrolling Carousel */}
-            <div className="carousel-container">
-              {finalDestinations.map((destination, index) => (
-                <div key={destination.id} className="carousel-card" style={getCardStyle(index)}>
-                   <Card className="w-full h-full flex flex-col bg-card/80 backdrop-blur-sm shadow-lg">
-                      <img
-                        src={destination.image}
-                        alt={destination.name}
-                        className="w-full h-48 object-cover"
-                      />
-                      <CardContent className="p-4 flex flex-col justify-between flex-1">
-                        <div>
-                          <h3 className="text-xl font-bold mb-1">{destination.name}</h3>
-                          <div className="flex items-center text-sm text-muted-foreground mb-2">
-                            <MapPin className="w-4 h-4 mr-1.5" /> {destination.location}
-                          </div>
-                           <p className="text-sm text-muted-foreground h-12 overflow-hidden">{destination.description}</p>
-                        </div>
-                        <Link to={`/destinations/${destination.id}`} className="w-full mt-4">
-                          <Button variant="outline" className="w-full">
-                            Learn More
-                          </Button>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                </div>
+            {/* --- Category Filter Buttons --- */}
+            <div className="flex flex-wrap gap-3 justify-center mb-16">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Button>
               ))}
             </div>
             
+            {/* --- 3D Carousel --- */}
+            <div className="carousel-container h-[420px]">
+             {finalDestinations.length > 0 ? (
+                finalDestinations.map((destination, index) => (
+                <div key={destination.id} className="carousel-card" style={getCardStyle(index)}>
+                   <Card className="w-full h-full flex flex-col bg-card/80 backdrop-blur-sm shadow-lg">
+                     <img
+                       src={destination.image}
+                       alt={destination.name}
+                       className="w-full h-48 object-cover"
+                     />
+                     <CardContent className="p-4 flex flex-col justify-between flex-1">
+                       <div>
+                         <h3 className="text-xl font-bold mb-1">{destination.name}</h3>
+                         <div className="flex items-center text-sm text-muted-foreground mb-2">
+                           <MapPin className="w-4 h-4 mr-1.5" /> {destination.location}
+                         </div>
+                          <p className="text-sm text-muted-foreground h-12 overflow-hidden">{destination.description}</p>
+                       </div>
+                       <Link to={`/destinations/${destination.id}`} className="w-full mt-4">
+                         <Button variant="outline" className="w-full">
+                           Learn More
+                         </Button>
+                       </Link>
+                     </CardContent>
+                   </Card>
+                </div>
+                ))
+             ) : (
+                <div className="text-center text-gray-500 absolute inset-0 flex items-center justify-center">
+                    <p>No destinations found matching your filters.</p>
+                </div>
+             )}
+            </div>
           </div>
         </section>
 
