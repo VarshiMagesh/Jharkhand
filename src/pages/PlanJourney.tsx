@@ -40,15 +40,17 @@ const PlanJourney = () => {
       <section className="pt-24 pb-12 nature-gradient">
   <div className="container mx-auto px-4 lg:px-8">
     <div className="text-center max-w-4xl mx-auto">
-      <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-        AI-Powered <span className="text-accent">Itinerary Planner</span>
-      </h1>
-      <p className="text-lg text-gray-700 md:text-gray-800 leading-relaxed mb-8">
-        Experience the future of travel planning. Our advanced AI creates personalized Jharkhand adventures 
-        based on your exact preferences, interests, and budget in minutes.  
-        Now with a built-in <span className="font-semibold text-accent">Currency Converter </span>  
-         to instantly calculate your travel costs in Indian Rupees.
-      </p>
+      <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 font-oswald">
+  AI-Powered <span className="text-accent">Itinerary Planner</span>
+</h1>
+
+<p className="text-lg text-gray-700 md:text-gray-800 leading-relaxed mb-8 font-montserrat">
+  Experience the future of travel planning. Our advanced AI creates personalized Jharkhand adventures 
+  based on your exact preferences, interests, and budget in minutes.  
+  Now with a built-in <span className="font-semibold text-accent">Currency Converter</span>  
+  to instantly calculate your travel costs in Indian Rupees.
+</p>
+
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
