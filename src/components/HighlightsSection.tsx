@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+// 1. Import Autoplay
+import { Navigation, Autoplay } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
@@ -12,9 +13,9 @@ import waterfallsImg from "@/assets/wtf.jpg";
 import tribalImg from "@/assets/th.jpg";
 import wildlifeImg from "@/assets/ws.jpg";
 import adventureImg from "@/assets/at.jpg";
-import paraglidingImg from "@/assets/paragliding.jpg"; // New image
-import bananaBoatImg from "@/assets/banana-boat.jpg"; // New image
-import trekkingImg from "@/assets/trekking.jpg";     // New image
+import paraglidingImg from "@/assets/paragliding.jpg";
+import bananaBoatImg from "@/assets/banana-boat.jpg";
+import trekkingImg from "@/assets/trekking.jpg";
 
 const HighlightsSection = () => {
   const highlights = [
@@ -77,7 +78,8 @@ const HighlightsSection = () => {
         </div>
 
         <Swiper
-          modules={[Navigation]}
+          // 2. Add Autoplay to the modules
+          modules={[Navigation, Autoplay]}
           navigation
           spaceBetween={30}
           slidesPerView={1}
@@ -86,6 +88,11 @@ const HighlightsSection = () => {
             1024: { slidesPerView: 3 },
           }}
           loop={true}
+          // 3. Add the autoplay configuration
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
           className="pb-12"
         >
           {highlights.map((highlight, index) => (
