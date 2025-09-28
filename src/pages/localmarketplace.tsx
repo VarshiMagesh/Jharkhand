@@ -349,9 +349,6 @@ className="w-full sm:max-w-xs"
 </SelectContent>
 </Select>
 </div>
-
-php-template
-Copy code
         {loading ? (
           <div className="text-center py-20"><p className="text-lg">Loading products...</p></div>
         ) : filteredAndSortedProducts.length > 0 ? (
@@ -395,4 +392,5 @@ Copy code
   <Footer />
 </div>
 );
+
 }
