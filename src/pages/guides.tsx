@@ -117,9 +117,63 @@ const Guides = () => {
     return Array.from(languages);
   }, [guides]);
 
+  // ✅ FIXED: This function now opens the booking modal instead of going to UPI page.
   const handleBookNowClick = (guide: Guide) => {
     setSelectedGuide(guide);
     setBookingModalOpen(true);
+  };
+
+  // In the booking form dialog
+  const handlePayViaUpi = () => {
+    if (!selectedGuide || !formData.booking_date) return;
+
+    // Calculate total cost based on selected duration
+    let numberOfDays = 0;
+    if (formData.tour_duration === '8+') {
+      numberOfDays = 7;
+    } else {
+      numberOfDays = parseInt(formData.tour_duration.split('-')[0], 10);
+    }
+    const totalCost = selectedGuide.cost_per_day * numberOfDays;
+
+    // Navigate to UPI page with all booking details
+    navigate('/upi', {
+      state: {
+        totalAmount: totalCost,
+        description: `Guide Booking - ${selectedGuide.name}`,
+        type: 'guide',
+        guideDetails: {
+          name: selectedGuide.name,
+          id: selectedGuide.id,
+          bookingDate: formData.booking_date.toISOString(),
+          duration: formData.tour_duration,
+          travelers: formData.number_of_travelers,
+          customerName: formData.customer_name,
+          customerEmail: formData.customer_email,
+          customerPhone: formData.customer_phone,
+          specialRequests: formData.special_requests
+        }
+      }
+    });
+  };
+
+  // In the confirmation dialog
+  const handlePayAfterBooking = () => {
+    if (!bookingDetails) return;
+
+    navigate('/upi', {
+      state: {
+        totalAmount: bookingDetails.totalCost,
+        description: `Guide Booking - ${bookingDetails.guideName}`,
+        type: 'guide',
+        bookingId: bookingDetails.bookingId,
+        guideDetails: {
+          name: bookingDetails.guideName,
+          bookingDate: bookingDetails.date.toISOString(),
+          duration: bookingDetails.duration
+        }
+      }
+    });
   };
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
@@ -162,7 +216,7 @@ const Guides = () => {
 
       setBookingModalOpen(false);
       setConfirmationModalOpen(true);
-      
+
       // Reset form
       setFormData({
         customer_name: "",
@@ -191,33 +245,8 @@ const Guides = () => {
     }
   };
 
-  // UPI payment helper (added)
-  const handlePayViaUpi = () => {
-    if (!selectedGuide) {
-      toast({
-        title: "No guide selected",
-        description: "Select a guide and open the booking modal to calculate the amount.",
-        variant: "destructive",
-      });
-      return;
-    }
-    // Calculate the same estimated cost
-    let numberOfDays = 0;
-    if (formData.tour_duration === '8+') {
-      numberOfDays = 7;
-    } else {
-      numberOfDays = parseInt(formData.tour_duration.split('-')[0], 10);
-    }
-    const amount = selectedGuide.cost_per_day * (isNaN(numberOfDays) ? 1 : numberOfDays);
-
-    // Navigate to the same UPI route pattern used in LocalMarketplace
-    navigate(
-      `/upi?amount=${amount}&description=${encodeURIComponent('Guide Booking')}&type=guide&name=${encodeURIComponent(selectedGuide.name)}`
-    );
-  };
-
   const totalCost = useMemo(() => {
-    if (!selectedGuide) return 0;
+    if (!selectedGuide) return '0.00';
     let numberOfDays = 0;
     if (formData.tour_duration === '8+') {
       numberOfDays = 7;
@@ -251,7 +280,7 @@ const Guides = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <header className="pt-0 pb-0 px-0">
         <img
           src={guidesBanner}
@@ -266,8 +295,8 @@ const Guides = () => {
           <CardContent className="p-6 flex flex-col md:flex-row gap-4 items-center">
             <div className="relative flex-grow w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                placeholder="Search guide by name..." 
+              <Input
+                placeholder="Search guide by name..."
                 className="pl-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -305,7 +334,7 @@ const Guides = () => {
         {filteredGuides.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-lg text-muted-foreground mb-4">No guides found matching your criteria.</p>
-            <Button 
+            <Button
               onClick={() => {
                 setSearchTerm("");
                 setSpecialtyFilter("all");
@@ -321,10 +350,10 @@ const Guides = () => {
             {filteredGuides.map((guide) => (
               <Card key={guide.id} className="overflow-hidden group hover:shadow-lg transition-shadow flex flex-col">
                 <div className="relative">
-                  <img 
-                    src={guide.profile_image_url} 
-                    alt={guide.name} 
-                    className="w-full h-64 object-cover" 
+                  <img
+                    src={guide.profile_image_url}
+                    alt={guide.name}
+                    className="w-full h-64 object-cover"
                   />
                   <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 text-sm font-semibold">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
@@ -337,7 +366,7 @@ const Guides = () => {
                     {guide.experience_years} years of experience | {guide.total_reviews} reviews
                   </p>
                   <p className="text-sm text-muted-foreground mb-4">{guide.location}</p>
-                  
+
                   {guide.specialties && (
                     <div className="flex flex-wrap gap-2 mb-4">
                       {guide.specialties.map(spec => (
@@ -345,7 +374,7 @@ const Guides = () => {
                       ))}
                     </div>
                   )}
-                  
+
                   {guide.languages && (
                     <div className="flex flex-wrap gap-2 mb-4">
                       {guide.languages.map(lang => (
@@ -353,9 +382,9 @@ const Guides = () => {
                       ))}
                     </div>
                   )}
-                  
+
                   <p className="text-muted-foreground text-sm mb-6 flex-grow">{guide.description}</p>
-                  
+
                   <div className="mt-auto space-y-3">
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-muted-foreground">Per Day:</span>
@@ -363,8 +392,8 @@ const Guides = () => {
                         <IndianRupee size={16} />{guide.cost_per_day}
                       </span>
                     </div>
-                    <Button 
-                      className="w-full hero-gradient text-white shadow-nature" 
+                    <Button
+                      className="w-full hero-gradient text-white shadow-nature"
                       onClick={() => handleBookNowClick(guide)}
                     >
                       <BookMarked className="w-4 h-4 mr-2" />
@@ -388,32 +417,32 @@ const Guides = () => {
               </DialogHeader>
               <form onSubmit={handleBookingSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
                 <div className="space-y-4">
-                  <Input 
-                    placeholder="Full Name" 
-                    required 
+                  <Input
+                    placeholder="Full Name"
+                    required
                     value={formData.customer_name}
-                    onChange={(e) => setFormData({...formData, customer_name: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
                   />
-                  <Input 
-                    type="email" 
-                    placeholder="Email Address" 
-                    required 
+                  <Input
+                    type="email"
+                    placeholder="Email Address"
+                    required
                     value={formData.customer_email}
-                    onChange={(e) => setFormData({...formData, customer_email: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })}
                   />
-                  <Input 
-                    placeholder="Phone Number" 
-                    required 
+                  <Input
+                    placeholder="Phone Number"
+                    required
                     value={formData.customer_phone}
-                    onChange={(e) => setFormData({...formData, customer_phone: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, customer_phone: e.target.value })}
                   />
-                  <Select 
-                    value={formData.number_of_travelers.toString()} 
-                    onValueChange={(value) => setFormData({...formData, number_of_travelers: parseInt(value)})}
+                  <Select
+                    value={formData.number_of_travelers.toString()}
+                    onValueChange={(value) => setFormData({ ...formData, number_of_travelers: parseInt(value) })}
                   >
                     <SelectTrigger>
                       <Users className="w-4 h-4 mr-2" />
-                      <SelectValue/>
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="1">1 Traveler</SelectItem>
@@ -423,13 +452,13 @@ const Guides = () => {
                       <SelectItem value="5">5+ Travelers</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select 
-                    value={formData.tour_duration} 
-                    onValueChange={(value) => setFormData({...formData, tour_duration: value})}
+                  <Select
+                    value={formData.tour_duration}
+                    onValueChange={(value) => setFormData({ ...formData, tour_duration: value })}
                   >
                     <SelectTrigger>
                       <Clock className="w-4 h-4 mr-2" />
-                      <SelectValue placeholder="Select duration"/>
+                      <SelectValue placeholder="Select duration" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="2-3">2-3 Days</SelectItem>
@@ -438,17 +467,17 @@ const Guides = () => {
                       <SelectItem value="8+">More than a week</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Textarea 
+                  <Textarea
                     placeholder="Special requests or requirements (optional)"
                     value={formData.special_requests}
-                    onChange={(e) => setFormData({...formData, special_requests: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, special_requests: e.target.value })}
                   />
                 </div>
                 <div className="flex flex-col">
-                  <Calendar 
-                    mode="single" 
-                    selected={formData.booking_date} 
-                    onSelect={(date) => setFormData({...formData, booking_date: date})} 
+                  <Calendar
+                    mode="single"
+                    selected={formData.booking_date}
+                    onSelect={(date) => setFormData({ ...formData, booking_date: date })}
                     className="rounded-md border self-center"
                     disabled={(date) => date < new Date()}
                   />
@@ -463,61 +492,53 @@ const Guides = () => {
                   </div>
                 </div>
 
-                {/* Payment via UPI (added) + existing Confirm Booking */}
                 <div className="md:col-span-2 space-y-3">
                   <Button
                     type="button"
                     variant="outline"
                     className="w-full"
                     onClick={handlePayViaUpi}
-                    disabled={!selectedGuide}
+                    disabled={!selectedGuide || !formData.booking_date}
                   >
                     Pay via UPI - ₹{totalCost}
                   </Button>
-
                 </div>
               </form>
             </>
           )}
         </DialogContent>
       </Dialog>
-      
+
       <Dialog open={isConfirmationModalOpen} onOpenChange={setConfirmationModalOpen}>
         <DialogContent className="bg-background sm:max-w-md">
-           {bookingDetails && (
-             <div className="text-center p-6">
-               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-               <h2 className="text-2xl font-bold text-foreground mb-2">Booking Request Submitted!</h2>
-               <p className="text-muted-foreground mb-4">
-                 {bookingDetails.guideName} will contact you within 2 hours to confirm availability and details.
-               </p>
-               <div className="bg-muted p-4 rounded-lg mb-4">
-                 <p className="text-sm"><strong>Booking ID:</strong> {bookingDetails.bookingId?.slice(0, 8)}</p>
-                 <p className="text-sm"><strong>Total Cost:</strong> ₹{bookingDetails.totalCost}</p>
-               </div>
+          {bookingDetails && (
+            <div className="text-center p-6">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-foreground mb-2">Booking Request Submitted!</h2>
+              <p className="text-muted-foreground mb-4">
+                {bookingDetails.guideName} will contact you within 2 hours to confirm availability and details.
+              </p>
+              <div className="bg-muted p-4 rounded-lg mb-4">
+                <p className="text-sm"><strong>Booking ID:</strong> {bookingDetails.bookingId?.slice(0, 8)}</p>
+                <p className="text-sm"><strong>Total Cost:</strong> ₹{bookingDetails.totalCost}</p>
+              </div>
 
-               {/* Pay after booking (added) */}
-               <Button
-                 className="w-full mb-2 hero-gradient text-white"
-                 onClick={() =>
-                   navigate(
-                     `/upi?amount=${bookingDetails.totalCost}&description=${encodeURIComponent('Guide Booking')}&type=guide&name=${encodeURIComponent(bookingDetails.guideName)}`
-                   )
-                 }
-               >
-                 Pay Now via UPI - ₹{bookingDetails.totalCost}
-               </Button>
+              <Button
+                className="w-full mb-2 hero-gradient text-white"
+                onClick={handlePayAfterBooking}
+              >
+                Pay Now via UPI - ₹{bookingDetails.totalCost}
+              </Button>
 
-               <Button className="w-full mt-2" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
-             </div>
-           )}
+              <Button className="w-full mt-2" onClick={() => setConfirmationModalOpen(false)}>Close</Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
-      
+
       <Footer />
     </div>
   );
 };
 
 export default Guides;
-
